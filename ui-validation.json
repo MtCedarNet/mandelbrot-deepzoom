@@ -1,0 +1,10 @@
+{
+  "javascript_errors": [],
+  "wheel_anchor_exact": true,
+  "deep_preset": true,
+  "location_roundtrip_exact": true,
+  "help_dialog": true,
+  "palette_selection": true,
+  "mobile_panel": true,
+  "webgpu_browser_execution": "NOT AVAILABLE: managed browser navigation restrictions. Layout uses an independent CPU image."
+}

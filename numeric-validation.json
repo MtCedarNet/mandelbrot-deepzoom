@@ -1,0 +1,1502 @@
+[
+  {
+    "name": "home",
+    "bits": 160,
+    "skip": 0,
+    "refLength": 1025,
+    "samples": 48,
+    "wrongByMoreThan2": 0,
+    "worst": 0,
+    "skipDifferences": 0,
+    "rows": [
+      {
+        "ix": 0,
+        "iy": 0,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 1,
+        "iy": 0,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 2,
+        "iy": 0,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 3,
+        "iy": 0,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 4,
+        "iy": 0,
+        "computed": 7,
+        "exact": 7
+      },
+      {
+        "ix": 5,
+        "iy": 0,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 6,
+        "iy": 0,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 7,
+        "iy": 0,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 0,
+        "iy": 1,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 1,
+        "iy": 1,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 2,
+        "iy": 1,
+        "computed": 6,
+        "exact": 6
+      },
+      {
+        "ix": 3,
+        "iy": 1,
+        "computed": 7,
+        "exact": 7
+      },
+      {
+        "ix": 4,
+        "iy": 1,
+        "computed": 20,
+        "exact": 20
+      },
+      {
+        "ix": 5,
+        "iy": 1,
+        "computed": 20,
+        "exact": 20
+      },
+      {
+        "ix": 6,
+        "iy": 1,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 7,
+        "iy": 1,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 0,
+        "iy": 2,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 1,
+        "iy": 2,
+        "computed": 6,
+        "exact": 6
+      },
+      {
+        "ix": 2,
+        "iy": 2,
+        "computed": 240,
+        "exact": 240
+      },
+      {
+        "ix": 3,
+        "iy": 2,
+        "computed": 49,
+        "exact": 49
+      },
+      {
+        "ix": 4,
+        "iy": 2,
+        "computed": 1024,
+        "exact": 1024
+      },
+      {
+        "ix": 5,
+        "iy": 2,
+        "computed": 1024,
+        "exact": 1024
+      },
+      {
+        "ix": 6,
+        "iy": 2,
+        "computed": 6,
+        "exact": 6
+      },
+      {
+        "ix": 7,
+        "iy": 2,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 0,
+        "iy": 3,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 1,
+        "iy": 3,
+        "computed": 6,
+        "exact": 6
+      },
+      {
+        "ix": 2,
+        "iy": 3,
+        "computed": 237,
+        "exact": 237
+      },
+      {
+        "ix": 3,
+        "iy": 3,
+        "computed": 49,
+        "exact": 49
+      },
+      {
+        "ix": 4,
+        "iy": 3,
+        "computed": 1024,
+        "exact": 1024
+      },
+      {
+        "ix": 5,
+        "iy": 3,
+        "computed": 1024,
+        "exact": 1024
+      },
+      {
+        "ix": 6,
+        "iy": 3,
+        "computed": 6,
+        "exact": 6
+      },
+      {
+        "ix": 7,
+        "iy": 3,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 0,
+        "iy": 4,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 1,
+        "iy": 4,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 2,
+        "iy": 4,
+        "computed": 6,
+        "exact": 6
+      },
+      {
+        "ix": 3,
+        "iy": 4,
+        "computed": 7,
+        "exact": 7
+      },
+      {
+        "ix": 4,
+        "iy": 4,
+        "computed": 20,
+        "exact": 20
+      },
+      {
+        "ix": 5,
+        "iy": 4,
+        "computed": 20,
+        "exact": 20
+      },
+      {
+        "ix": 6,
+        "iy": 4,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 7,
+        "iy": 4,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 0,
+        "iy": 5,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 1,
+        "iy": 5,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 2,
+        "iy": 5,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 3,
+        "iy": 5,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 4,
+        "iy": 5,
+        "computed": 7,
+        "exact": 7
+      },
+      {
+        "ix": 5,
+        "iy": 5,
+        "computed": 5,
+        "exact": 5
+      },
+      {
+        "ix": 6,
+        "iy": 5,
+        "computed": 4,
+        "exact": 4
+      },
+      {
+        "ix": 7,
+        "iy": 5,
+        "computed": 4,
+        "exact": 4
+      }
+    ]
+  },
+  {
+    "name": "seahorse",
+    "bits": 169,
+    "skip": 0,
+    "refLength": 65,
+    "samples": 48,
+    "wrongByMoreThan2": 0,
+    "worst": 0,
+    "skipDifferences": 0,
+    "rows": [
+      {
+        "ix": 0,
+        "iy": 0,
+        "computed": 54,
+        "exact": 54
+      },
+      {
+        "ix": 1,
+        "iy": 0,
+        "computed": 284,
+        "exact": 284
+      },
+      {
+        "ix": 2,
+        "iy": 0,
+        "computed": 193,
+        "exact": 193
+      },
+      {
+        "ix": 3,
+        "iy": 0,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 4,
+        "iy": 0,
+        "computed": 129,
+        "exact": 129
+      },
+      {
+        "ix": 5,
+        "iy": 0,
+        "computed": 94,
+        "exact": 94
+      },
+      {
+        "ix": 6,
+        "iy": 0,
+        "computed": 151,
+        "exact": 151
+      },
+      {
+        "ix": 7,
+        "iy": 0,
+        "computed": 522,
+        "exact": 522
+      },
+      {
+        "ix": 0,
+        "iy": 1,
+        "computed": 215,
+        "exact": 215
+      },
+      {
+        "ix": 1,
+        "iy": 1,
+        "computed": 72,
+        "exact": 72
+      },
+      {
+        "ix": 2,
+        "iy": 1,
+        "computed": 109,
+        "exact": 109
+      },
+      {
+        "ix": 3,
+        "iy": 1,
+        "computed": 41,
+        "exact": 41
+      },
+      {
+        "ix": 4,
+        "iy": 1,
+        "computed": 43,
+        "exact": 43
+      },
+      {
+        "ix": 5,
+        "iy": 1,
+        "computed": 47,
+        "exact": 47
+      },
+      {
+        "ix": 6,
+        "iy": 1,
+        "computed": 51,
+        "exact": 51
+      },
+      {
+        "ix": 7,
+        "iy": 1,
+        "computed": 358,
+        "exact": 358
+      },
+      {
+        "ix": 0,
+        "iy": 2,
+        "computed": 30,
+        "exact": 30
+      },
+      {
+        "ix": 1,
+        "iy": 2,
+        "computed": 31,
+        "exact": 31
+      },
+      {
+        "ix": 2,
+        "iy": 2,
+        "computed": 34,
+        "exact": 34
+      },
+      {
+        "ix": 3,
+        "iy": 2,
+        "computed": 46,
+        "exact": 46
+      },
+      {
+        "ix": 4,
+        "iy": 2,
+        "computed": 312,
+        "exact": 312
+      },
+      {
+        "ix": 5,
+        "iy": 2,
+        "computed": 47,
+        "exact": 47
+      },
+      {
+        "ix": 6,
+        "iy": 2,
+        "computed": 49,
+        "exact": 49
+      },
+      {
+        "ix": 7,
+        "iy": 2,
+        "computed": 53,
+        "exact": 53
+      },
+      {
+        "ix": 0,
+        "iy": 3,
+        "computed": 29,
+        "exact": 29
+      },
+      {
+        "ix": 1,
+        "iy": 3,
+        "computed": 31,
+        "exact": 31
+      },
+      {
+        "ix": 2,
+        "iy": 3,
+        "computed": 39,
+        "exact": 39
+      },
+      {
+        "ix": 3,
+        "iy": 3,
+        "computed": 58,
+        "exact": 58
+      },
+      {
+        "ix": 4,
+        "iy": 3,
+        "computed": 104,
+        "exact": 104
+      },
+      {
+        "ix": 5,
+        "iy": 3,
+        "computed": 49,
+        "exact": 49
+      },
+      {
+        "ix": 6,
+        "iy": 3,
+        "computed": 50,
+        "exact": 50
+      },
+      {
+        "ix": 7,
+        "iy": 3,
+        "computed": 54,
+        "exact": 54
+      },
+      {
+        "ix": 0,
+        "iy": 4,
+        "computed": 29,
+        "exact": 29
+      },
+      {
+        "ix": 1,
+        "iy": 4,
+        "computed": 32,
+        "exact": 32
+      },
+      {
+        "ix": 2,
+        "iy": 4,
+        "computed": 290,
+        "exact": 290
+      },
+      {
+        "ix": 3,
+        "iy": 4,
+        "computed": 56,
+        "exact": 56
+      },
+      {
+        "ix": 4,
+        "iy": 4,
+        "computed": 52,
+        "exact": 52
+      },
+      {
+        "ix": 5,
+        "iy": 4,
+        "computed": 51,
+        "exact": 51
+      },
+      {
+        "ix": 6,
+        "iy": 4,
+        "computed": 52,
+        "exact": 52
+      },
+      {
+        "ix": 7,
+        "iy": 4,
+        "computed": 348,
+        "exact": 348
+      },
+      {
+        "ix": 0,
+        "iy": 5,
+        "computed": 30,
+        "exact": 30
+      },
+      {
+        "ix": 1,
+        "iy": 5,
+        "computed": 264,
+        "exact": 264
+      },
+      {
+        "ix": 2,
+        "iy": 5,
+        "computed": 326,
+        "exact": 326
+      },
+      {
+        "ix": 3,
+        "iy": 5,
+        "computed": 194,
+        "exact": 194
+      },
+      {
+        "ix": 4,
+        "iy": 5,
+        "computed": 55,
+        "exact": 55
+      },
+      {
+        "ix": 5,
+        "iy": 5,
+        "computed": 268,
+        "exact": 268
+      },
+      {
+        "ix": 6,
+        "iy": 5,
+        "computed": 57,
+        "exact": 57
+      },
+      {
+        "ix": 7,
+        "iy": 5,
+        "computed": 83,
+        "exact": 83
+      }
+    ]
+  },
+  {
+    "name": "deep-seahorse",
+    "bits": 197,
+    "skip": 0,
+    "refLength": 3088,
+    "samples": 48,
+    "wrongByMoreThan2": 1,
+    "worst": 50,
+    "skipDifferences": 0,
+    "rows": [
+      {
+        "ix": 0,
+        "iy": 0,
+        "computed": 1161,
+        "exact": 1161
+      },
+      {
+        "ix": 1,
+        "iy": 0,
+        "computed": 1328,
+        "exact": 1328
+      },
+      {
+        "ix": 2,
+        "iy": 0,
+        "computed": 1473,
+        "exact": 1473
+      },
+      {
+        "ix": 3,
+        "iy": 0,
+        "computed": 1895,
+        "exact": 1845
+      },
+      {
+        "ix": 4,
+        "iy": 0,
+        "computed": 1233,
+        "exact": 1233
+      },
+      {
+        "ix": 5,
+        "iy": 0,
+        "computed": 1259,
+        "exact": 1259
+      },
+      {
+        "ix": 6,
+        "iy": 0,
+        "computed": 1315,
+        "exact": 1315
+      },
+      {
+        "ix": 7,
+        "iy": 0,
+        "computed": 1237,
+        "exact": 1237
+      },
+      {
+        "ix": 0,
+        "iy": 1,
+        "computed": 1208,
+        "exact": 1208
+      },
+      {
+        "ix": 1,
+        "iy": 1,
+        "computed": 1462,
+        "exact": 1462
+      },
+      {
+        "ix": 2,
+        "iy": 1,
+        "computed": 1497,
+        "exact": 1497
+      },
+      {
+        "ix": 3,
+        "iy": 1,
+        "computed": 2119,
+        "exact": 2119
+      },
+      {
+        "ix": 4,
+        "iy": 1,
+        "computed": 2217,
+        "exact": 2217
+      },
+      {
+        "ix": 5,
+        "iy": 1,
+        "computed": 2272,
+        "exact": 2272
+      },
+      {
+        "ix": 6,
+        "iy": 1,
+        "computed": 2121,
+        "exact": 2121
+      },
+      {
+        "ix": 7,
+        "iy": 1,
+        "computed": 3562,
+        "exact": 3562
+      },
+      {
+        "ix": 0,
+        "iy": 2,
+        "computed": 1237,
+        "exact": 1237
+      },
+      {
+        "ix": 1,
+        "iy": 2,
+        "computed": 1623,
+        "exact": 1623
+      },
+      {
+        "ix": 2,
+        "iy": 2,
+        "computed": 2141,
+        "exact": 2141
+      },
+      {
+        "ix": 3,
+        "iy": 2,
+        "computed": 2186,
+        "exact": 2186
+      },
+      {
+        "ix": 4,
+        "iy": 2,
+        "computed": 1993,
+        "exact": 1993
+      },
+      {
+        "ix": 5,
+        "iy": 2,
+        "computed": 3823,
+        "exact": 3823
+      },
+      {
+        "ix": 6,
+        "iy": 2,
+        "computed": 1820,
+        "exact": 1820
+      },
+      {
+        "ix": 7,
+        "iy": 2,
+        "computed": 1987,
+        "exact": 1987
+      },
+      {
+        "ix": 0,
+        "iy": 3,
+        "computed": 2000,
+        "exact": 2000
+      },
+      {
+        "ix": 1,
+        "iy": 3,
+        "computed": 1820,
+        "exact": 1820
+      },
+      {
+        "ix": 2,
+        "iy": 3,
+        "computed": 3797,
+        "exact": 3797
+      },
+      {
+        "ix": 3,
+        "iy": 3,
+        "computed": 2053,
+        "exact": 2053
+      },
+      {
+        "ix": 4,
+        "iy": 3,
+        "computed": 2193,
+        "exact": 2193
+      },
+      {
+        "ix": 5,
+        "iy": 3,
+        "computed": 2173,
+        "exact": 2173
+      },
+      {
+        "ix": 6,
+        "iy": 3,
+        "computed": 1408,
+        "exact": 1408
+      },
+      {
+        "ix": 7,
+        "iy": 3,
+        "computed": 1407,
+        "exact": 1407
+      },
+      {
+        "ix": 0,
+        "iy": 4,
+        "computed": 4096,
+        "exact": 4096
+      },
+      {
+        "ix": 1,
+        "iy": 4,
+        "computed": 2118,
+        "exact": 2118
+      },
+      {
+        "ix": 2,
+        "iy": 4,
+        "computed": 2272,
+        "exact": 2272
+      },
+      {
+        "ix": 3,
+        "iy": 4,
+        "computed": 2233,
+        "exact": 2233
+      },
+      {
+        "ix": 4,
+        "iy": 4,
+        "computed": 2114,
+        "exact": 2114
+      },
+      {
+        "ix": 5,
+        "iy": 4,
+        "computed": 1546,
+        "exact": 1546
+      },
+      {
+        "ix": 6,
+        "iy": 4,
+        "computed": 1309,
+        "exact": 1309
+      },
+      {
+        "ix": 7,
+        "iy": 4,
+        "computed": 1342,
+        "exact": 1342
+      },
+      {
+        "ix": 0,
+        "iy": 5,
+        "computed": 1235,
+        "exact": 1235
+      },
+      {
+        "ix": 1,
+        "iy": 5,
+        "computed": 1313,
+        "exact": 1313
+      },
+      {
+        "ix": 2,
+        "iy": 5,
+        "computed": 1261,
+        "exact": 1261
+      },
+      {
+        "ix": 3,
+        "iy": 5,
+        "computed": 1235,
+        "exact": 1235
+      },
+      {
+        "ix": 4,
+        "iy": 5,
+        "computed": 1341,
+        "exact": 1341
+      },
+      {
+        "ix": 5,
+        "iy": 5,
+        "computed": 1319,
+        "exact": 1319
+      },
+      {
+        "ix": 6,
+        "iy": 5,
+        "computed": 1660,
+        "exact": 1660
+      },
+      {
+        "ix": 7,
+        "iy": 5,
+        "computed": 1163,
+        "exact": 1163
+      }
+    ]
+  },
+  {
+    "name": "tip80",
+    "bits": 426,
+    "skip": 112,
+    "refLength": 1025,
+    "samples": 48,
+    "wrongByMoreThan2": 0,
+    "worst": 0,
+    "skipDifferences": 0,
+    "rows": [
+      {
+        "ix": 0,
+        "iy": 0,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 1,
+        "iy": 0,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 2,
+        "iy": 0,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 3,
+        "iy": 0,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 4,
+        "iy": 0,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 5,
+        "iy": 0,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 6,
+        "iy": 0,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 7,
+        "iy": 0,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 0,
+        "iy": 1,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 1,
+        "iy": 1,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 2,
+        "iy": 1,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 3,
+        "iy": 1,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 4,
+        "iy": 1,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 5,
+        "iy": 1,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 6,
+        "iy": 1,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 7,
+        "iy": 1,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 0,
+        "iy": 2,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 1,
+        "iy": 2,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 2,
+        "iy": 2,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 3,
+        "iy": 2,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 4,
+        "iy": 2,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 5,
+        "iy": 2,
+        "computed": 139,
+        "exact": 139
+      },
+      {
+        "ix": 6,
+        "iy": 2,
+        "computed": 139,
+        "exact": 139
+      },
+      {
+        "ix": 7,
+        "iy": 2,
+        "computed": 140,
+        "exact": 140
+      },
+      {
+        "ix": 0,
+        "iy": 3,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 1,
+        "iy": 3,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 2,
+        "iy": 3,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 3,
+        "iy": 3,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 4,
+        "iy": 3,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 5,
+        "iy": 3,
+        "computed": 139,
+        "exact": 139
+      },
+      {
+        "ix": 6,
+        "iy": 3,
+        "computed": 139,
+        "exact": 139
+      },
+      {
+        "ix": 7,
+        "iy": 3,
+        "computed": 140,
+        "exact": 140
+      },
+      {
+        "ix": 0,
+        "iy": 4,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 1,
+        "iy": 4,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 2,
+        "iy": 4,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 3,
+        "iy": 4,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 4,
+        "iy": 4,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 5,
+        "iy": 4,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 6,
+        "iy": 4,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 7,
+        "iy": 4,
+        "computed": 138,
+        "exact": 138
+      },
+      {
+        "ix": 0,
+        "iy": 5,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 1,
+        "iy": 5,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 2,
+        "iy": 5,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 3,
+        "iy": 5,
+        "computed": 136,
+        "exact": 136
+      },
+      {
+        "ix": 4,
+        "iy": 5,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 5,
+        "iy": 5,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 6,
+        "iy": 5,
+        "computed": 137,
+        "exact": 137
+      },
+      {
+        "ix": 7,
+        "iy": 5,
+        "computed": 137,
+        "exact": 137
+      }
+    ]
+  },
+  {
+    "name": "tip1000",
+    "bits": 3482,
+    "skip": 1640,
+    "refLength": 4097,
+    "samples": 48,
+    "wrongByMoreThan2": 0,
+    "worst": 0,
+    "skipDifferences": 0,
+    "rows": [
+      {
+        "ix": 0,
+        "iy": 0,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 1,
+        "iy": 0,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 2,
+        "iy": 0,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 3,
+        "iy": 0,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 4,
+        "iy": 0,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 5,
+        "iy": 0,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 6,
+        "iy": 0,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 7,
+        "iy": 0,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 0,
+        "iy": 1,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 1,
+        "iy": 1,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 2,
+        "iy": 1,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 3,
+        "iy": 1,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 4,
+        "iy": 1,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 5,
+        "iy": 1,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 6,
+        "iy": 1,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 7,
+        "iy": 1,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 0,
+        "iy": 2,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 1,
+        "iy": 2,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 2,
+        "iy": 2,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 3,
+        "iy": 2,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 4,
+        "iy": 2,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 5,
+        "iy": 2,
+        "computed": 1667,
+        "exact": 1667
+      },
+      {
+        "ix": 6,
+        "iy": 2,
+        "computed": 1667,
+        "exact": 1667
+      },
+      {
+        "ix": 7,
+        "iy": 2,
+        "computed": 1668,
+        "exact": 1668
+      },
+      {
+        "ix": 0,
+        "iy": 3,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 1,
+        "iy": 3,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 2,
+        "iy": 3,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 3,
+        "iy": 3,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 4,
+        "iy": 3,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 5,
+        "iy": 3,
+        "computed": 1667,
+        "exact": 1667
+      },
+      {
+        "ix": 6,
+        "iy": 3,
+        "computed": 1667,
+        "exact": 1667
+      },
+      {
+        "ix": 7,
+        "iy": 3,
+        "computed": 1668,
+        "exact": 1668
+      },
+      {
+        "ix": 0,
+        "iy": 4,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 1,
+        "iy": 4,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 2,
+        "iy": 4,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 3,
+        "iy": 4,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 4,
+        "iy": 4,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 5,
+        "iy": 4,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 6,
+        "iy": 4,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 7,
+        "iy": 4,
+        "computed": 1666,
+        "exact": 1666
+      },
+      {
+        "ix": 0,
+        "iy": 5,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 1,
+        "iy": 5,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 2,
+        "iy": 5,
+        "computed": 1664,
+        "exact": 1664
+      },
+      {
+        "ix": 3,
+        "iy": 5,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 4,
+        "iy": 5,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 5,
+        "iy": 5,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 6,
+        "iy": 5,
+        "computed": 1665,
+        "exact": 1665
+      },
+      {
+        "ix": 7,
+        "iy": 5,
+        "computed": 1665,
+        "exact": 1665
+      }
+    ]
+  }
+]

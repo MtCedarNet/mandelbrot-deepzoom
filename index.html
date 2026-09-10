@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101216">
+<title>Infinite Field | WebGPU Mandelbrot</title>
+<style>
+:root{color-scheme:dark;--bg:#101216;--panel:#16191e;--line:#2b2f36;--muted:#8d949e;--text:#eceeea;--accent:#d0f48a;--mono:ui-monospace,SFMono-Regular,Consolas,monospace;--side:288px}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:13px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button,select,input,textarea{outline:none}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button{border:1px solid var(--line);border-radius:6px;background:#20242a;transition:background .15s,border-color .15s}button:hover{background:#2a3037;border-color:#536044}button:disabled{opacity:.4;cursor:default}svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}header{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;background:#12151a;position:relative;z-index:3}.brand{display:flex;align-items:center;gap:12px}.brandmark{width:31px;height:31px;color:var(--accent);border:1px solid #6f8151;border-radius:50%;display:grid;place-items:center}.brandmark svg{width:22px;height:22px}.brandname{font-size:14px;letter-spacing:.19em;font-weight:650}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.14em}.header-right{display:flex;align-items:center;gap:14px}.chip{font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:7px;color:#bdc3c9}.dot{width:6px;height:6px;background:#929ba7;border-radius:50%}.dot.live{background:var(--accent);box-shadow:0 0 9px #c5f08333}.header-btn{padding:7px 11px;display:flex;align-items:center;gap:7px;background:transparent;font-size:11px}
+.layout{height:calc(100% - 64px);display:flex}.sidebar{width:var(--side);flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:auto;z-index:2;scrollbar-width:thin;scrollbar-color:#3a4149 transparent}.sidebar-inner{padding:24px 20px 18px}.eyebrow{font:9px var(--mono);letter-spacing:.18em;color:var(--accent);text-transform:uppercase}h1{font-size:30px;line-height:1.2;letter-spacing:-.04em;margin:12px 0 10px;font-weight:550}.intro{margin:0;color:var(--muted);font-size:11px;line-height:1.85}.section{margin-top:27px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.label{font-size:10px;letter-spacing:.09em;color:#a4abb3}.section-no{font:9px var(--mono);color:#626b75}.presets{display:grid;gap:6px}.preset{display:flex;align-items:center;text-align:left;gap:10px;padding:9px 11px;background:transparent;border-color:#30353c;min-height:43px}.preset .num{font:10px var(--mono);color:#707a85;width:15px}.preset .name{flex:1;font-size:11px}.preset .depth{font:9px var(--mono);color:#83917a}.preset.active{background:#d0f48a10;border-color:#677c48}.preset.active .num,.preset.active .depth{color:var(--accent)}.control-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}.control-row label{font-size:11px;color:#bcc1c8}select{background:#20242a;border:1px solid #383e47;border-radius:5px;padding:5px 7px;max-width:140px;font-size:10px}input[type=range]{width:100%;height:3px;accent-color:var(--accent);margin:10px 0 15px}input[type=checkbox]{accent-color:var(--accent)}.toggle-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#bcc1c8;margin:12px 0}.switch{appearance:none;width:28px;height:16px;border-radius:10px;background:#3a4049;position:relative;cursor:pointer;transition:.2s}.switch:before{content:"";position:absolute;left:3px;top:3px;width:10px;height:10px;border-radius:50%;background:#afb5bd;transition:.2s}.switch:checked{background:#6f8b43}.switch:checked:before{transform:translateX(12px);background:#e3fac1}.palette-row{display:flex;gap:7px}.swatch{flex:1;height:25px;padding:0;border-radius:4px;border:2px solid transparent;position:relative}.swatch.active{outline:1px solid var(--accent);outline-offset:3px}.swatch:nth-child(1){background:linear-gradient(100deg,#0b142c,#265eb0,#c5eee1,#e6ac58,#342627)}.swatch:nth-child(2){background:linear-gradient(100deg,#0b1521,#1b586d,#7fd5d0,#def4e3)}.swatch:nth-child(3){background:linear-gradient(100deg,#160e2d,#633280,#de6b79,#fac879)}.swatch:nth-child(4){background:linear-gradient(100deg,#070a10,#5d646e,#c4cbd1,#fff)}.auto-btn{width:100%;padding:11px;background:var(--accent);color:#18220d;border-color:var(--accent);font-size:11px;font-weight:650;display:flex;align-items:center;justify-content:center;gap:8px}.auto-btn:hover{background:#dcfaaa}.auto-btn.running{background:#202c1a;color:var(--accent)}.subnote{font-size:9px;line-height:1.8;color:#747e8a;margin:9px 0 0}.sidebar-footer{margin-top:auto;padding:15px 20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;font:9px var(--mono);color:#7d8994}.sidebar-footer b{font-weight:400;color:#c0c8cd}details{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}summary{cursor:pointer;color:#a8b0b8;font-size:10px;list-style:none;display:flex;align-items:center;justify-content:space-between}summary:after{content:"+";font:15px var(--mono)}details[open] summary:after{content:"-"}.editor{margin-top:12px}.editor label{display:block;font:9px var(--mono);color:var(--muted);margin:10px 0 4px}.editor textarea,.editor input{width:100%;border:1px solid #353b44;border-radius:4px;background:#11151a;padding:7px;font:10px/1.5 var(--mono);resize:vertical}.editor textarea{height:48px}.editor .buttons{display:flex;gap:6px;margin-top:10px}.editor .buttons button{flex:1;padding:6px;font-size:10px}.editor .wide-btn{width:100%;padding:7px;font-size:10px;margin-top:7px}
+.stage{flex:1;min-width:0;position:relative;background:#070b13;overflow:hidden}.stage canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.stage canvas.dragging{cursor:grabbing}.stage-top{position:absolute;left:26px;top:24px;pointer-events:none}.stage-overline{color:#a6b6c6;font:9px var(--mono);letter-spacing:.18em;text-shadow:0 1px 8px #000}.stage-name{font-weight:450;font-size:19px;letter-spacing:.05em;margin-top:6px;text-shadow:0 1px 15px #000}.stage-top .tiny{margin-top:7px;font:10px var(--mono);color:#bac7d6;text-shadow:0 1px 6px #000}.zoom-readout{position:absolute;right:25px;top:22px;text-align:right;pointer-events:none}.zoom-readout .caption{font:9px var(--mono);letter-spacing:.14em;color:#b0bdcc}.zoom-readout .value{font:29px/1.2 var(--mono);color:#e9f1eb;margin-top:6px;letter-spacing:-.03em;text-shadow:0 2px 12px #000}.zoom-readout sup{font-size:16px}.zoom-readout .precision{font:9px var(--mono);color:#91a0ad;margin-top:7px}.view-tools{position:absolute;right:23px;top:125px;display:flex;flex-direction:column;gap:7px}.view-tools button{width:35px;height:35px;display:grid;place-items:center;background:#111823c9;border-color:#63748955;backdrop-filter:blur(12px)}.view-tools .sep{height:5px}.view-tools .active{color:var(--accent);border-color:#829764}.crosshair{position:absolute;left:50%;top:50%;width:19px;height:19px;transform:translate(-50%,-50%);pointer-events:none;opacity:.5;display:none}.crosshair:before,.crosshair:after{content:"";position:absolute;background:#ecf3db}.crosshair:before{width:19px;height:1px;top:9px}.crosshair:after{width:1px;height:19px;left:9px}.crosshair.visible{display:block}.bottom-hud{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#080e18d9);padding:40px 25px 19px;pointer-events:none}.hud-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-end}.coordinates{font:9px/1.8 var(--mono);color:#a8b7c8;min-width:0;max-width:65%}.coordinates div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.coordinates span{color:#667c91;margin-right:10px}.render-status{font:9px var(--mono);text-align:right;color:#b2c1cf;white-space:nowrap}.progress{height:2px;background:#8eabc822;margin-top:14px;overflow:hidden}.progress i{display:block;height:100%;width:0%;background:var(--accent);transition:width .13s}.hintbar{position:absolute;bottom:103px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:17px;font-size:9px;color:#c4cdda;background:#0c1424a3;border:1px solid #bdc9d320;border-radius:30px;padding:7px 15px;white-space:nowrap;pointer-events:none;backdrop-filter:blur(10px);transition:opacity .4s}.hintbar.hidden{opacity:0}.hintbar kbd{font:10px var(--mono);border:none;margin-right:4px;color:#f0f1db}.mobile-toggle{display:none}.toast{position:absolute;left:50%;top:90px;transform:translateX(-50%);max-width:85%;border:1px solid #6a8056;background:#172017f2;color:#dceccd;padding:10px 16px;font-size:11px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:7;white-space:pre-line}.toast.show{opacity:1}.error-panel{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:#080d17ee;z-index:10;padding:28px}.error-panel.visible{display:flex}.error-card{max-width:530px;border:1px solid #4c4d42;padding:28px;background:#14191e;border-radius:10px}.error-card h2{font-size:20px;font-weight:500;color:#d0f48a;margin-top:0}.error-card p{color:#b8c2cc;font-size:12px;line-height:1.9}.error-card pre{white-space:pre-wrap;overflow-wrap:anywhere;font:10px/1.6 var(--mono);color:#8696a5;background:#0a0e14;padding:12px;border-radius:4px;max-height:180px;overflow:auto}.error-card button{padding:9px 16px;font-size:12px}.help-dialog{max-width:590px;max-height:80vh;background:#181d24;color:var(--text);border:1px solid #475241;border-radius:9px;padding:28px;line-height:1.9;font-size:12px}.help-dialog::backdrop{background:#0009;backdrop-filter:blur(4px)}.help-dialog h2{font-size:22px;font-weight:500;margin-top:0}.help-dialog h3{color:var(--accent);font-size:12px;margin:22px 0 5px}.help-dialog p{color:#b4bec8;margin:5px 0}.help-dialog button{padding:7px 24px;float:right;margin-top:18px}.help-dialog code{font:11px var(--mono);color:#d0f48a}.collapsed .sidebar{display:none}.collapsed .mobile-toggle{display:grid}
+@media(max-width:950px){:root{--side:246px}.sidebar-inner{padding:20px 15px}.sidebar-footer{padding:13px 15px}.stage-top{left:18px}.zoom-readout{right:18px}.hintbar{gap:10px;font-size:8px}.coordinates{max-width:55%}.header-right .chip.local{display:none}}
+@media(max-width:680px){header{height:54px;padding:0 13px}.brandname{font-size:11px}.brand small{font-size:8px}.brandmark{width:27px;height:27px}.header-right{gap:7px}.header-btn{padding:6px}.header-btn span{display:none}.layout{height:calc(100% - 54px)}.sidebar{position:absolute;top:54px;bottom:0;width:268px;box-shadow:10px 0 30px #0008;display:none}.sidebar.open{display:flex}.mobile-toggle{display:grid}.zoom-readout .value{font-size:22px}.stage-top{top:19px;left:16px}.stage-name{font-size:15px}.zoom-readout{top:18px;right:16px}.view-tools{right:15px;top:112px}.bottom-hud{padding:35px 15px 15px}.hintbar{bottom:110px;gap:8px}.coordinates{max-width:58%;font-size:8px}.render-status{font-size:8px}.header-right .chip{display:none}}
+</style>
+</head>
+<body>
+<svg style="display:none" aria-hidden="true"><defs>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8M5 10v11h14V10M9 21v-7h6v7"/></symbol><symbol id="i-cross" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></symbol><symbol id="i-shot" viewBox="0 0 24 24"><path d="M3 7h5l2-3h4l2 3h5v14H3z"/><circle cx="12" cy="13" r="4"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8z"/></symbol><symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a3 3 0 1 1 4.3 2.7c-1.3.7-1.5 1.4-1.5 2.3M12 17h.01"/></symbol><symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M9 4v16"/></symbol><symbol id="i-full" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></symbol>
+</defs></svg>
+<header>
+ <div class="brand"><div class="brandmark"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-42 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(42 12 12)"/><circle cx="12" cy="12" r="1"/></svg></div><div><div class="brandname">INFINITE FIELD</div><small>MANDELBROT EXPLORER</small></div></div>
+ <div class="header-right"><div class="chip local">LOCAL / NO UPLOADS</div><div class="chip"><i id="gpuDot" class="dot"></i><span id="gpuLabel">CONNECTING GPU</span></div><button id="panelToggle" class="header-btn" aria-label="Panel"><svg><use href="#i-panel"/></svg></button><button id="helpBtn" class="header-btn" title="Help"><svg><use href="#i-help"/></svg><span data-i18n="help">Guide</span></button><button id="shotBtn" class="header-btn" title="Save PNG"><svg><use href="#i-shot"/></svg><span>PNG</span></button></div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar"><div class="sidebar-inner">
+<div class="eyebrow">A small window into infinity</div><h1>Mandelbrot</h1><p class="intro" data-i18n="intro">Beyond floating-point limits.<br>Choose a boundary. Keep going.</p>
+<div class="section"><div class="section-head"><span class="label" data-i18n="destinations">DESTINATIONS</span><span class="section-no">01 / EXPLORE</span></div><div class="presets" id="presets"></div></div>
+<div class="section"><div class="section-head"><span class="label" data-i18n="rendering">RENDERING</span><span class="section-no">02 / ENGINE</span></div>
+<div class="control-row"><label for="iterations" data-i18n="iteration">Iteration budget</label><select id="iterations"><option value="auto">AUTO</option><option>512</option><option>1024</option><option>2048</option><option>4096</option><option>8192</option><option>16384</option><option>32768</option><option>65536</option><option>100000</option></select></div>
+<div class="control-row"><label for="quality" data-i18n="quality">Resolution</label><select id="quality"><option value="0.5" data-i18n="fast">Fast / 0.5x</option><option value="0.75" data-i18n="balanced">Balanced / 0.75x</option><option value="1" selected data-i18n="fine">Fine / 1x</option><option value="1.5" data-i18n="ultra">Ultra / 1.5x</option></select></div>
+<label class="toggle-row"><span data-i18n="skip">Adaptive linear skip</span><input type="checkbox" id="skip" class="switch" checked></label>
+<p class="subnote" data-i18n="skipNote">BigInt reference orbit + exponent-extended GPU perturbation. Refinement continues after you stop moving.</p>
+</div>
+<div class="section"><div class="section-head"><span class="label" data-i18n="color">COLOR</span><span class="section-no">03 / SPECTRUM</span></div><div class="palette-row" id="palettes"><button class="swatch active" data-palette="0" aria-label="Atlas" title="Atlas"></button><button class="swatch" data-palette="1" aria-label="Glacier" title="Glacier"></button><button class="swatch" data-palette="2" aria-label="Ember" title="Ember"></button><button class="swatch" data-palette="3" aria-label="Silver" title="Silver"></button></div><div class="control-row" style="margin-bottom:0"><label for="phase" data-i18n="phase">Palette offset</label><span class="section-no" id="phaseValue">0.00</span></div><input id="phase" type="range" min="0" max="1" value="0" step="0.005"><div class="control-row"><label for="density" data-i18n="density">Band density</label><select id="density"><option value="0.006">0.3x</option><option value="0.012">0.6x</option><option value="0.02" selected>1x</option><option value="0.04">2x</option><option value="0.08">4x</option></select></div></div>
+<div class="section"><button id="autoBtn" class="auto-btn"><svg><use href="#i-play"/></svg><span data-i18n="auto">Start auto zoom</span></button><p class="subnote" data-i18n="autoNote">Zooms toward the crosshair. Space to pause.</p></div>
+<details id="locationDetails"><summary data-i18n="coordinates">Coordinates & bookmarks</summary><div class="editor"><label for="realInput">CENTER / REAL</label><textarea id="realInput" spellcheck="false"></textarea><label for="imagInput">CENTER / IMAGINARY</label><textarea id="imagInput" spellcheck="false"></textarea><label for="zoomInput">ZOOM / 10 ^ x</label><input id="zoomInput" type="number" min="-1" max="1000" step="any"><div class="buttons"><button id="applyLocation" data-i18n="go">Go</button><button id="copyLocation" data-i18n="copy">Copy</button></div><div class="buttons"><button id="saveLocation" data-i18n="save">Save JSON</button><button id="loadLocation" data-i18n="load">Load JSON</button></div><input type="file" id="loadFile" accept="application/json,.json" hidden></div></details>
+</div><div class="sidebar-footer"><span>ENGINE <b>WEBGPU + BIGINT</b></span><span>v1.0</span></div></aside>
+<main class="stage" id="stage">
+<canvas id="canvas" aria-label="Interactive Mandelbrot set. Scroll to zoom, drag to pan." tabindex="0"></canvas>
+<div class="stage-top"><div class="stage-overline" id="sceneTag">01 / THE WHOLE PICTURE</div><div class="stage-name" id="sceneName"></div><div class="tiny">z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c</div></div>
+<div class="zoom-readout"><div class="caption">MAGNIFICATION</div><div class="value" id="zoomValue">1.00<span style="font-size:16px">x</span></div><div class="precision" id="precisionValue">REFERENCE / 160 BITS</div></div>
+<div class="view-tools"><button id="zoomIn" title="Zoom in (+)"><svg><use href="#i-plus"/></svg></button><button id="zoomOut" title="Zoom out (-)"><svg><use href="#i-minus"/></svg></button><div class="sep"></div><button id="homeBtn" title="Home (R)"><svg><use href="#i-home"/></svg></button><button id="crossBtn" title="Crosshair"><svg><use href="#i-cross"/></svg></button><button id="fullBtn" title="Fullscreen"><svg><use href="#i-full"/></svg></button></div>
+<div class="crosshair" id="crosshair"></div>
+<div class="hintbar" id="hintbar"><span><kbd>&#x2195;</kbd><span data-i18n="scrollHint">scroll to zoom</span></span><span><kbd>&#x2194;</kbd><span data-i18n="dragHint">drag to pan</span></span><span><kbd>2x</kbd><span data-i18n="doubleHint">double click</span></span></div>
+<div class="bottom-hud"><div class="hud-top"><div class="coordinates"><div><span>Re</span><b id="realHud" style="font-weight:400">-0.5</b></div><div><span>Im</span><b id="imagHud" style="font-weight:400">0.0</b></div></div><div class="render-status"><div id="statusText">INITIALIZING</div><div id="detailText" style="color:#71879b;margin-top:5px">GPU COMPUTE / PERTURBATION</div></div></div><div class="progress"><i id="progressBar"></i></div></div>
+<div class="toast" id="toast"></div>
+<div class="error-panel" id="errorPanel"><div class="error-card"><div class="eyebrow">BROWSER / GPU CHECK</div><h2 id="errorTitle"></h2><p id="errorDescription"></p><pre id="errorDetail"></pre><button id="retryBtn" data-i18n="reload">Reload</button></div></div>
+</main>
+</div>
+<dialog id="helpDialog" class="help-dialog"><h2 data-i18n="guideTitle">A guide to the infinite field</h2><div id="guideContent"></div><button id="closeHelp" data-i18n="close">Close</button></dialog>
+<script>
+'use strict';
+/* Infinite Field. Self-contained WebGPU viewer, no external assets or requests.
+   References: https://mathr.co.uk/blog/2021-05-14_deep_zoom_theory_and_practice.html
+   https://mathr.co.uk/blog/2022-02-21_deep_zoom_theory_and_practice_again.html
+   https://www.w3.org/TR/WGSL/
+   Camera: fixed-point BigInt with 4096 fractional bits. Reference: adaptive precision.
+   GPU: double-single (two f32) mantissas with explicit i32 exponents, perturbation, and rebasing.
+   Rendering is numerical visualization, not a proof of set membership. */
+const $=id=>document.getElementById(id);
+const JP={intro:'\u6d6e\u52d5\u5c0f\u6570\u70b9\u306e\u9650\u754c\u3092\u8d8a\u3048\u3066\u3002<br>\u5883\u754c\u3092\u9078\u3093\u3067\u3001\u305d\u306e\u5148\u3078\u3002',destinations:'\u63a2\u7d22\u30dd\u30a4\u30f3\u30c8',rendering:'\u63cf\u753b\u8a2d\u5b9a',iteration:'\u6700\u5927\u53cd\u5fa9\u56de\u6570',quality:'\u89e3\u50cf\u5ea6',fast:'\u8efd\u91cf / 0.5x',balanced:'\u6a19\u6e96 / 0.75x',fine:'\u9ad8\u7cbe\u7d30 / 1x',ultra:'\u8d85\u9ad8\u7cbe\u7d30 / 1.5x',skip:'\u9069\u5fdc\u7684\u306a\u7dda\u5f62\u30b9\u30ad\u30c3\u30d7',skipNote:'BigInt \u57fa\u6e96\u8ecc\u9053 + \u6307\u6570\u62e1\u5f35\u3064\u304d GPU \u6442\u52d5\u6cd5\u3002\u64cd\u4f5c\u3092\u6b62\u3081\u308b\u3068\u9ad8\u7cbe\u7d30\u306b\u518d\u63cf\u753b\u3057\u307e\u3059\u3002',color:'\u30ab\u30e9\u30fc\u30d1\u30ec\u30c3\u30c8',phase:'\u8272\u306e\u30aa\u30d5\u30bb\u30c3\u30c8',density:'\u7b49\u9ad8\u7dda\u306e\u5bc6\u5ea6',auto:'\u81ea\u52d5\u30ba\u30fc\u30e0\u3092\u958b\u59cb',autoNote:'\u753b\u9762\u4e2d\u5fc3\u3078\u9032\u307f\u307e\u3059\u3002Space \u3067\u4e00\u6642\u505c\u6b62\u3002',coordinates:'\u5ea7\u6a19\u30fb\u30d6\u30c3\u30af\u30de\u30fc\u30af',go:'\u79fb\u52d5',copy:'\u30b3\u30d4\u30fc',save:'JSON \u4fdd\u5b58',load:'JSON \u8aad\u8fbc',help:'\u4f7f\u3044\u65b9',scrollHint:'\u30db\u30a4\u30fc\u30eb\u3067\u62e1\u5927',dragHint:'\u30c9\u30e9\u30c3\u30b0\u3067\u79fb\u52d5',doubleHint:'\u30c0\u30d6\u30eb\u30af\u30ea\u30c3\u30af',reload:'\u518d\u8aad\u307f\u8fbc\u307f',guideTitle:'\u7121\u9650\u306e\u624b\u524d\u3001\u64cd\u4f5c\u30ac\u30a4\u30c9',close:'\u9589\u3058\u308b'};
+for(const el of document.querySelectorAll('[data-i18n]'))el.innerHTML=JP[el.dataset.i18n]||el.innerHTML;
+$('guideContent').innerHTML=`<h3>\u64cd\u4f5c</h3><p>\u30db\u30a4\u30fc\u30eb\u3067\u30dd\u30a4\u30f3\u30bf\u4f4d\u7f6e\u3092\u4e2d\u5fc3\u306b\u62e1\u5927\u30fb\u7e2e\u5c0f\u3002\u30c9\u30e9\u30c3\u30b0\u3067\u79fb\u52d5\u3001\u30c0\u30d6\u30eb\u30af\u30ea\u30c3\u30af\u3067 4 \u500d\u3002Shift + \u30db\u30a4\u30fc\u30eb\u3067\u9ad8\u901f\u62e1\u5927\u3002\u30bf\u30c3\u30c1\u306f\u30d4\u30f3\u30c1\u3068\u30c9\u30e9\u30c3\u30b0\u3002</p><p><code>+ / -</code> \u62e1\u5927\u30fb\u7e2e\u5c0f / <code>R</code> \u5168\u666f / <code>Space</code> \u81ea\u52d5\u30ba\u30fc\u30e0 / <code>Esc</code> \u505c\u6b62 / <code>H</code> \u30d1\u30cd\u30eb</p><h3>\u6df1\u304f\u6f5c\u308b\u306b\u306f</h3><p>\u9ed2\u3044\u90e8\u5206\u3068\u8272\u306e\u3064\u3044\u305f\u90e8\u5206\u306e\u5883\u754c\u3092\u8ffd\u3044\u307e\u3059\u3002\u753b\u9762\u5168\u4f53\u304c\u9ed2\u3044\u3068\u304d\u306f\u3001\u53cd\u5fa9\u56de\u6570\u3092\u5897\u3084\u3059\u304b\u5c11\u3057\u623b\u3063\u3066\u5225\u306e\u5883\u754c\u3078\u3002\u9ed2\u306f\u300c\u53cd\u5fa9\u4e0a\u9650\u307e\u3067\u767a\u6563\u3057\u306a\u304b\u3063\u305f\u300d\u70b9\u3067\u3001\u5185\u90e8\u306e\u8a3c\u660e\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002</p><h3>\u7cbe\u5ea6\u3068\u9650\u754c</h3><p>\u5ea7\u6a19\u306f\u5c0f\u6570\u90e8 4096 bit\u3001\u57fa\u6e96\u8ecc\u9053\u306f\u30ba\u30fc\u30e0\u306b\u5fdc\u3058\u305f BigInt \u7cbe\u5ea6\u3067\u8a08\u7b97\u3002GPU \u306f FP32 \u4e8c\u672c\u7d44\u306e\u4eee\u6570\u3068\u5225\u7ba1\u7406\u306e\u6574\u6570\u6307\u6570\u3067\u5dee\u5206\u3092\u8ffd\u3044\u307e\u3059\u3002\u64cd\u4f5c\u4e0a\u9650\u306f 10<sup>1000</sup> \u500d\u3002\u305f\u3060\u3057\u3001\u3059\u3079\u3066\u306e\u5834\u6240\u3067\u6b63\u78ba\u306a\u753b\u50cf\u3084\u4e00\u5b9a\u306e\u901f\u5ea6\u3092\u4fdd\u8a3c\u3059\u308b\u3082\u306e\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002\u4e0d\u81ea\u7136\u306a\u6a21\u69d8\u306f\u30b9\u30ad\u30c3\u30d7\u3092\u30aa\u30d5\u306b\u3057\u3066\u6bd4\u8f03\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p><p>\u9ad8\u901f\u30b9\u30ad\u30c3\u30d7\u306f\u753b\u9762\u5168\u4f53\u306e\u975e\u7dda\u5f62\u8aa4\u5dee\u306e\u4e0a\u754c\u3092\u898b\u7a4d\u3082\u308a\u3001\u521d\u671f\u53cd\u5fa9\u3092\u7dda\u5f62\u8fd1\u4f3c\u3067\u7701\u7565\u3057\u307e\u3059\u3002\u6f14\u7b97\u306e\u4e38\u3081\u8aa4\u5dee\u307e\u3067\u542b\u3080\u53b3\u5bc6\u306a\u533a\u9593\u6f14\u7b97\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002</p><h3>\u5b9f\u884c\u74b0\u5883</h3><p>WebGPU \u304c\u4f7f\u3048\u308b\u30d6\u30e9\u30a6\u30b6\u3068\u30cf\u30fc\u30c9\u30a6\u30a7\u30a2\u30a2\u30af\u30bb\u30e9\u30ec\u30fc\u30b7\u30e7\u30f3\u304c\u5fc5\u8981\u3067\u3059\u3002\u5358\u4f53 HTML \u3067\u52d5\u304b\u306a\u3044\u74b0\u5883\u3067\u306f HTTPS \u307e\u305f\u306f localhost \u3067\u958b\u3044\u3066\u304f\u3060\u3055\u3044\u3002\u5916\u90e8\u30b5\u30fc\u30d0\u30fc\u3078\u306e\u901a\u4fe1\u306f\u884c\u3044\u307e\u305b\u3093\u3002</p>`;
+const CAM_BITS=4096, UNIT=1n<<4096n, LOG2_10=Math.log2(10), LOG2_SPAN=Math.log2(3.5), MAX_ZOOM=1000*LOG2_10;
+const presets=[
+ {name:'\u5168\u666f',tag:'THE WHOLE PICTURE',r:'-0.5',i:'0',zoom:0,label:'1x'},
+ {name:'\u6d77\u99ac\u306e\u8c37',tag:'SEAHORSE VALLEY',r:'-0.7435',i:'0.1314',span:0.008,label:'438x'},
+ {name:'\u3089\u305b\u3093\u306e\u5ead',tag:'THE SPIRAL GARDEN',r:'-0.74543',i:'0.113008',span:0.0009,label:'3.9e3x'},
+ {name:'\u6d77\u99ac\u306e\u5965\u3078',tag:'BEYOND THE SEAHORSE',r:'-0.743643887037151',i:'0.13182590420533',span:0.00000000004,label:'8.8e10x'},
+ {name:'\u7cbe\u5ea6\u30c6\u30b9\u30c8 / \u22122 \u306e\u5148\u7aef',tag:'THE TIP / 80 DECIMAL ORDERS',r:'-2',i:'0',zoom:80*LOG2_10,label:'1e80x'}
+];
+function parseDecimal(s){
+ s=String(s).trim();if(s.length>2400)throw Error('Coordinate is too long (2400 characters maximum).');
+ const m=s.match(/^([+-]?)(\d*)(?:\.(\d*))?(?:e([+-]?\d+))?$/i);if(!m||!(m[2]||m[3]))throw Error('Invalid decimal coordinate.');
+ const exp=Number(m[4]||0)-(m[3]||'').length;if(!Number.isSafeInteger(exp)||Math.abs(exp)>3000)throw Error('Coordinate exponent is out of range.');
+ let a=BigInt((m[2]||'0')+(m[3]||''))*UNIT;a=exp>=0?a*10n**BigInt(exp):a/10n**BigInt(-exp);if(m[1]==='-')a=-a;
+ if(a>1000000n*UNIT||a< -1000000n*UNIT)throw Error('Coordinate magnitude exceeds 1000000.');return a;
+}
+function formatDecimal(x,digits=30){const neg=x<0n;if(neg)x=-x;const whole=x>>4096n;const frac=x&(UNIT-1n);let tail=((frac*10n**BigInt(digits))>>4096n).toString().padStart(digits,'0').replace(/0+$/,'');return(neg?'-':'')+whole.toString()+(tail?'.'+tail:'.0');}
+const floatView=new DataView(new ArrayBuffer(8));
+// Exact conversion of a JS binary64 value times 2^e into camera fixed point.
+function scaledBig(x,e){if(!Number.isFinite(x))throw Error('Non-finite camera offset.');if(x===0)return 0n;floatView.setFloat64(0,x,false);const hi=floatView.getUint32(0),lo=floatView.getUint32(4);const eb=(hi>>>20)&2047;let m=(BigInt(hi&0xfffff)<<32n)|BigInt(lo);if(eb)m|=1n<<52n;const sh=CAM_BITS+e+(eb?eb-1023:-1022)-52;let q=sh>=0?m<<BigInt(sh):m>>BigInt(-sh);return hi>>>31?-q:q;}
+function bigScaled(x,e){if(!x)return 0;const sign=x<0n?-1:1;if(x<0n)x=-x;const bits=x.toString(2).length;const sh=Math.max(0,bits-52);const exp=sh-CAM_BITS-e;if(exp>900)return sign*1e100;if(exp< -1100)return 0;return sign*Number(x>>BigInt(sh))*2**exp;}
+function spanParts(z){const l=LOG2_SPAN-z,e=Math.floor(l);return{m:2**(l-e),e};}
+const camera={r:parseDecimal('-0.5'),i:0n,z:0};let scene=0;
+const canvas=$('canvas'),stage=$('stage');let device,context,format,computePipeline,displayPipeline,displayLayout,sampler,displayUniform,emptyTexture;
+let ready=false,fatal=false,currentJob=null,front=null,worker=null,workerReject=null,jobSerial=0,viewVersion=0,timers=[],drawPending=false,autoTimer=null,lastInteraction=0,toastTimer=null;
+let palette=0,phase=0,density=0.02;let snapshotSerial=0;const gpuStats={renders:0,lastError:null,ready:false,lastCompleted:null};
+function aspect(){const b=stage.getBoundingClientRect();return b.height/Math.max(1,b.width);}
+function snapshot(){return{r:camera.r,i:camera.i,z:camera.z,aspect:aspect(),version:viewVersion};}
+function targetIterations(z=camera.z){return $('iterations').value==='auto'?Math.min(65536,Math.max(1024,Math.ceil((1024+Math.max(0,z)*64)/256)*256)):Number($('iterations').value);}
+function referenceBits(z){return Math.min(CAM_BITS,Math.max(160,Math.ceil(Math.max(0,z)+160)));}
+function toast(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3500);}
+function setStatus(s,d){$('statusText').textContent=s;if(d!==undefined)$('detailText').textContent=d;}
+function updateHud(){
+ const z10=camera.z/LOG2_10;
+ $('zoomValue').innerHTML=z10<5?(2**camera.z).toLocaleString('en-US',{maximumFractionDigits:2})+'<span style="font-size:15px">x</span>':'10<sup>'+z10.toFixed(2)+'</sup><span style="font-size:15px">x</span>';
+ $('precisionValue').textContent='REFERENCE / '+referenceBits(camera.z)+' BITS';
+ const digits=Math.min(1040,Math.max(20,Math.ceil(z10)+12));
+ $('realHud').textContent=formatDecimal(camera.r,Math.min(digits,60));$('imagHud').textContent=formatDecimal(camera.i,Math.min(digits,60));
+ if(scene>=0){$('sceneTag').textContent=String(scene+1).padStart(2,'0')+' / '+presets[scene].tag;$('sceneName').textContent=presets[scene].name;}
+ else{$('sceneTag').textContent='LIVE / FREE EXPLORATION';$('sceneName').textContent='\u81ea\u7531\u63a2\u7d22';}
+ for(const el of document.querySelectorAll('.preset'))el.classList.toggle('active',Number(el.dataset.index)===scene);
+}
+function fillEditor(){const digits=Math.min(1100,Math.max(32,Math.ceil(camera.z/LOG2_10)+32));$('realInput').value=formatDecimal(camera.r,digits);$('imagInput').value=formatDecimal(camera.i,digits);$('zoomInput').value=(camera.z/LOG2_10).toFixed(12);}
+function offsetAt(nx,ny,s=snapshot()){const p=spanParts(s.z);return{r:scaledBig((nx-.5)*p.m,p.e),i:scaledBig((.5-ny)*s.aspect*p.m,p.e)};}
+function zoomAt(nx,ny,dz,custom=false){const s=snapshot(),a=offsetAt(nx,ny,s);const nz=Math.max(-1.5,Math.min(MAX_ZOOM,camera.z+dz));if(nz===camera.z){if(dz>0)stopAuto();return;}camera.z=nz;const b=offsetAt(nx,ny);camera.r+=a.r-b.r;camera.i+=a.i-b.i;if(custom)scene=-1;interact();}
+function panPixels(dx,dy,s=snapshot()){const w=Math.max(1,stage.clientWidth),p=spanParts(s.z);camera.r=s.r-scaledBig(dx/w*p.m,p.e);camera.i=s.i+scaledBig(dy/w*p.m,p.e);scene=-1;interact();}
+function interact(){lastInteraction=performance.now();$('hintbar').classList.add('hidden');updateHud();queueDraw();scheduleRender(true);}
+function selectPreset(i){stopAuto();scene=i;const p=presets[i];camera.r=parseDecimal(p.r);camera.i=parseDecimal(p.i);camera.z=p.zoom??Math.log2(3.5/p.span);updateHud();fillEditor();queueDraw();scheduleRender(false);if(innerWidth<680)$('sidebar').classList.remove('open');}
+for(let i=0;i<presets.length;i++){const b=document.createElement('button');b.className='preset'+(i===0?' active':'');b.dataset.index=i;b.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+'</span><span class="name">'+presets[i].name+'</span><span class="depth">'+presets[i].label+'</span>';b.onclick=()=>selectPreset(i);$('presets').appendChild(b);}
+
+// Worker-side high-precision reference and conservative, first-order prefix skip.
+function referenceWorker(){
+ const norm=(x,y,e)=>{const a=Math.max(Math.abs(x),Math.abs(y));if(!a)return{x:0,y:0,e:0};const k=Math.floor(Math.log2(a))+1;return{x:x*2**(-k),y:y*2**(-k),e:e+k};};
+ const mul=(a,b)=>norm(a.x*b.x-a.y*b.y,a.x*b.y+a.y*b.x,a.e+b.e);
+ const add=(a,b)=>{if(a.x===0&&a.y===0)return b;if(b.x===0&&b.y===0)return a;const e=Math.max(a.e,b.e);const p=a.e-e< -1074?0:2**(a.e-e),q=b.e-e< -1074?0:2**(b.e-e);return norm(a.x*p+b.x*q,a.y*p+b.y*q,e);};
+ const logAbs=a=>(a.x===0&&a.y===0)?-Infinity:a.e+Math.log2(Math.hypot(a.x,a.y));
+ const logAdd=(a,b)=>{if(a===-Infinity)return b;if(b===-Infinity)return a;const hi=Math.max(a,b),lo=Math.min(a,b);return hi+Math.log2(1+2**(lo-hi));};
+ function fromBig(x,y,P){let ax=x<0n?-x:x,ay=y<0n?-y:y;const a=ax>ay?ax:ay;if(a===0n)return{x:0,y:0,e:0};let shift=Math.max(0,P-54);let xx=Number(ax>>BigInt(shift)),yy=Number(ay>>BigInt(shift));if(Math.max(xx,yy)<256){shift=Math.max(0,a.toString(2).length-54);xx=Number(ax>>BigInt(shift));yy=Number(ay>>BigInt(shift));}return norm(x<0n?-xx:xx,y<0n?-yy:yy,shift-P);}
+ self.onmessage=ev=>{const p=ev.data;try{
+  const start=performance.now(),P=p.bits,B=BigInt(P),down=BigInt(4096-P),cr=BigInt(p.r)>>down,ci=BigInt(p.i)>>down;
+  const buf=new ArrayBuffer((p.maxIter+1)*24),f=new Float32Array(buf),ints=new Int32Array(buf);
+  let x=0n,y=0n,n=0,z={x:0,y:0,e:0},D={x:0,y:0,e:0},logE=-Infinity,canSkip=p.skip;
+  let best={n:0,x:0,y:0,e:0};const S={x:.5,y:0,e:p.spanExp+1},logRadius=Math.log2(p.radius),limit=256n<<(2n*B);
+  while(true){
+   const o=n*6;f[o]=z.x;f[o+1]=z.y;f[o+2]=z.x-f[o];f[o+3]=z.y-f[o+1];ints[o+4]=z.e;
+   const xx=x*x,yy=y*y;if(xx+yy>limit||n>=p.maxIter)break;
+   let nextD=D,nextE=logE;
+   if(canSkip){const a=mul(z,D);nextD=add({x:a.x,y:a.y,e:a.e+1},S);const bound=logAdd(logAbs(D)+logRadius,logE);nextE=logAdd(logE+1+logAbs(z),2*bound);if(!Number.isFinite(nextE)&&nextE!==-Infinity)nextE=-Infinity;}
+   const xy=x*y;x=((xx-yy)>>B)+cr;y=((2n*xy)>>B)+ci;n++;z=fromBig(x,y,P);
+   if(canSkip){D=nextD;logE=nextE;const d=logAbs(D)+logRadius,total=logAdd(d,logE);const noEscape=logAdd(logAbs(z),total)<1.5;const valid=logE===-Infinity||logE<d-46;
+    if(valid&&noEscape&&n<p.maxIter&&n>=8)best={n,x:D.x,y:D.y,e:D.e};else if(!valid||!noEscape)canSkip=false;
+   }
+   if((n&8191)===0)self.postMessage({progress:n,id:p.id});
+  }
+  if(best.n>=n)best={n:0,x:0,y:0,e:0};
+  self.postMessage({id:p.id,buffer:buf,length:n+1,bits:P,skip:best,ms:performance.now()-start},[buf]);
+ }catch(e){self.postMessage({id:p.id,error:String(e.stack||e)});}};
+}
+const workerURL=URL.createObjectURL(new Blob(['('+referenceWorker.toString()+')()'],{type:'text/javascript'}));
+function cancelWorker(){if(worker){worker.terminate();worker=null;}if(workerReject){workerReject(new Error('cancelled'));workerReject=null;}}
+function getReference(s,maxIter,id){
+ cancelWorker();const p=spanParts(s.z);return new Promise((resolve,reject)=>{workerReject=reject;worker=new Worker(workerURL);worker.onerror=e=>{workerReject=null;reject(Error(e.message));};worker.onmessage=e=>{const d=e.data;if(d.progress){if(id===jobSerial)setStatus('\u57fa\u6e96\u8ecc\u9053\u3092\u8a08\u7b97\u4e2d',d.progress.toLocaleString()+' / '+maxIter.toLocaleString());return;}worker.terminate();worker=null;workerReject=null;d.error?reject(Error(d.error)):resolve(d);};worker.postMessage({r:s.r.toString(),i:s.i.toString(),bits:referenceBits(s.z),spanExp:p.e,radius:p.m*.5*Math.hypot(1,s.aspect)*1.01,maxIter,skip:$('skip').checked,id});});
+}
+
+const computeWGSL=String.raw`
+struct Cx { m: vec2<f32>, l: vec2<f32>, e: i32, }
+struct Pixel { d: Cx, n: u32, r: u32, mu: f32, status: u32, }
+struct Params {
+ dims: vec2<u32>, maxIter: u32, steps: u32,
+ refLen: u32, initialN: u32, dcExp: i32, palette: u32,
+ spanMant: f32, aspect: f32, phase: f32, density: f32,
+ derivative: vec2<f32>, derivativeLo: vec2<f32>,
+ derivativeExp: i32, flags: u32, pad: vec2<u32>,
+}
+@group(0) @binding(0) var<uniform> p: Params;
+@group(0) @binding(1) var<storage, read> reference: array<Cx>;
+@group(0) @binding(2) var<storage, read_write> pixels: array<Pixel>;
+@group(0) @binding(3) var outputImage: texture_storage_2d<rgba8unorm, write>;
+@group(0) @binding(4) var<storage,read_write> unfinishedGroups: atomic<u32>;
+var<workgroup> groupPending: atomic<u32>;
+// Error-compensated f32 pairs. Dekker products do not assume fused fma.
+fn twoSum(a:f32,b:f32)->vec2<f32>{
+ let s=a+b;let v=s-a;return vec2<f32>(s,(a-(s-v))+(b-v));
+}
+fn dsAdd(a:vec2<f32>,b:vec2<f32>)->vec2<f32>{
+ let s=twoSum(a.x,b.x);return twoSum(s.x,(s.y+a.y)+b.y);
+}
+fn dsMul(a:vec2<f32>,b:vec2<f32>)->vec2<f32>{
+ let product=a.x*b.x;
+ let ca=4097.0*a.x;let ah=ca-(ca-a.x);let al=a.x-ah;
+ let cb=4097.0*b.x;let bh=cb-(cb-b.x);let bl=b.x-bh;
+ let residual=(((ah*bh-product)+ah*bl)+al*bh)+al*bl;
+ return twoSum(product,((residual+a.x*b.y)+a.y*b.x)+a.y*b.y);
+}
+fn normalizePair(m:vec2<f32>,l:vec2<f32>,e:i32)->Cx{
+ let a=max(abs(m.x),abs(m.y));
+ if(a==0.0){return Cx(vec2<f32>(0.0),vec2<f32>(0.0),0);}
+ let k=frexp(a).exp;let scale=exp2(f32(-k));return Cx(m*scale,l*scale,e+k);
+}
+fn normalizeC(m:vec2<f32>,e:i32)->Cx{return normalizePair(m,vec2<f32>(0.0),e);}
+fn cmul(a:vec2<f32>,b:vec2<f32>)->vec2<f32>{return vec2<f32>(a.x*b.x-a.y*b.y,a.x*b.y+a.y*b.x);}
+fn mulC(a:Cx,b:Cx)->Cx{
+ let ax=vec2<f32>(a.m.x,a.l.x);let ay=vec2<f32>(a.m.y,a.l.y);
+ let bx=vec2<f32>(b.m.x,b.l.x);let by=vec2<f32>(b.m.y,b.l.y);
+ let x=dsAdd(dsMul(ax,bx),-dsMul(ay,by));let y=dsAdd(dsMul(ax,by),dsMul(ay,bx));
+ return normalizePair(vec2<f32>(x.x,y.x),vec2<f32>(x.y,y.y),a.e+b.e);
+}
+fn addC(a:Cx,b:Cx)->Cx{
+ if(all(a.m==vec2<f32>(0.0))){return b;}
+ if(all(b.m==vec2<f32>(0.0))){return a;}
+ let e=max(a.e,b.e);let da=a.e-e;let db=b.e-e;
+ var sa=0.0;var sb=0.0;if(da>=-120){sa=exp2(f32(da));}if(db>=-120){sb=exp2(f32(db));}
+ let x=dsAdd(vec2<f32>(a.m.x,a.l.x)*sa,vec2<f32>(b.m.x,b.l.x)*sb);
+ let y=dsAdd(vec2<f32>(a.m.y,a.l.y)*sa,vec2<f32>(b.m.y,b.l.y)*sb);
+ return normalizePair(vec2<f32>(x.x,y.x),vec2<f32>(x.y,y.y),e);
+}
+fn normLess(a:Cx,b:Cx)->bool {
+ if(all(a.m==vec2<f32>(0.0))){return any(b.m!=vec2<f32>(0.0));}
+ if(all(b.m==vec2<f32>(0.0))){return false;}
+ let d=a.e-b.e;if(d < -1){return true;}if(d > 1){return false;}
+ return dot(a.m,a.m)*exp2(f32(2*d))<dot(b.m,b.m);
+}
+fn escaped(a:Cx)->bool {
+ if(a.e>5){return true;}
+ if(a.e<4){return false;}
+ return dot(a.m,a.m)*exp2(f32(2*a.e))>256.0;
+}
+fn atlas(t:f32)->vec3<f32> {
+ let colors=array<vec3<f32>,7>(vec3<f32>(0.025,0.042,0.09),vec3<f32>(0.035,0.14,0.36),vec3<f32>(0.10,0.39,0.65),vec3<f32>(0.61,0.85,0.82),vec3<f32>(0.97,0.87,0.62),vec3<f32>(0.66,0.30,0.13),vec3<f32>(0.025,0.042,0.09));
+ let a=fract(t)*6.0;let j=min(u32(a),5u);return mix(colors[j],colors[j+1u],smoothstep(0.0,1.0,fract(a)));
+}
+fn color(mu:f32)->vec3<f32> {
+ let t=mu*p.density+p.phase;
+ if(p.palette==1u){let a=vec3<f32>(0.5)+0.5*cos(6.2831853*(vec3<f32>(t)+vec3<f32>(0.50,0.26,0.17)));return vec3<f32>(0.025,0.075,0.11)+a*vec3<f32>(0.64,0.80,0.79);}
+ if(p.palette==2u){let a=vec3<f32>(0.5)+0.5*cos(6.2831853*(vec3<f32>(t)+vec3<f32>(0.05,0.29,0.53)));return vec3<f32>(0.05,0.015,0.06)+a*vec3<f32>(0.92,0.69,0.62);}
+ if(p.palette==3u){let a=0.5-0.5*cos(6.2831853*t);return vec3<f32>(0.02)+pow(a,0.75)*vec3<f32>(0.87,0.91,0.94);}
+ return atlas(t);
+}
+@compute @workgroup_size(8,8)
+fn main(@builtin(global_invocation_id) gid:vec3<u32>,@builtin(local_invocation_index) localIndex:u32){
+ if(localIndex==0u){atomicStore(&groupPending,0u);}
+ workgroupBarrier();
+ if(all(gid.xy<p.dims)){
+ let idx=gid.y*p.dims.x+gid.x;
+ var v=pixels[idx];
+ let uv=(vec2<f32>(gid.xy)+vec2<f32>(0.5))/vec2<f32>(p.dims);
+ let t=vec2<f32>(uv.x-0.5,(0.5-uv.y)*p.aspect)*p.spanMant;
+ let dc=normalizeC(t,p.dcExp);
+ if(v.n==0u && v.status==0u){v.d=mulC(Cx(p.derivative,p.derivativeLo,p.derivativeExp),normalizeC(t,0));v.n=p.initialN;v.r=p.initialN;
+  // Safe-margin fast inclusion tests only at shallow scales, never at deep zoom.
+  if(p.dcExp > -18 && p.initialN==0u){
+   let rr=reference[1];let c=rr.m*exp2(f32(rr.e))+t*exp2(f32(p.dcExp));let x=c.x-0.25;let q=x*x+c.y*c.y;
+   if(q*(q+x)<0.25*c.y*c.y-0.00001 || (c.x+1.0)*(c.x+1.0)+c.y*c.y < 0.06249){v.status=2u;v.n=p.maxIter;}
+  }
+ }
+ if(v.status==0u){
+  for(var j=0u;j<p.steps;j++){
+   if(v.n>=p.maxIter){v.status=2u;break;}
+   let zr=reference[v.r];
+   var linear=mulC(zr,v.d);linear.e+=1;
+   let quadratic=mulC(v.d,v.d);
+   v.d=addC(addC(linear,quadratic),dc);
+   v.r+=1u;v.n+=1u;
+   let total=addC(reference[v.r],v.d);
+   if(escaped(total)){
+    let logRadius=f32(total.e)+0.5*log2(dot(total.m,total.m));
+    v.mu=f32(v.n)+1.0-log2(max(0.000001,logRadius));v.status=1u;break;
+   }
+   // Rebase to critical orbit Z_0=0 when it is the closer reference,
+   // or before walking beyond an escaped/truncated reference orbit.
+   if(normLess(total,v.d) || v.r+1u>=p.refLen){v.d=total;v.r=0u;}
+  }
+  if(v.n>=p.maxIter && v.status==0u){v.status=2u;}
+ }
+ pixels[idx]=v;
+ var rgba=vec4<f32>(0.014,0.02,0.032,0.0);
+ if(v.status==1u){rgba=vec4<f32>(color(v.mu),1.0);}else if(v.status==2u){rgba=vec4<f32>(0.010,0.015,0.024,1.0);}
+ textureStore(outputImage,vec2<i32>(gid.xy),rgba);
+ if(v.status==0u){atomicStore(&groupPending,1u);}
+ }
+ workgroupBarrier();
+ if(localIndex==0u && atomicLoad(&groupPending)!=0u){atomicAdd(&unfinishedGroups,1u);}
+}
+`;
+const displayWGSL=String.raw`
+struct Display { oldTransform:vec4<f32>, newTransform:vec4<f32>, state:vec4<f32>, }
+@group(0) @binding(0) var<uniform> p:Display;
+@group(0) @binding(1) var texOld:texture_2d<f32>;
+@group(0) @binding(2) var texNew:texture_2d<f32>;
+@group(0) @binding(3) var smp:sampler;
+struct VertexOut {@builtin(position) pos:vec4<f32>,@location(0) uv:vec2<f32>,}
+@vertex fn vs(@builtin(vertex_index) i:u32)->VertexOut{var a=array<vec2<f32>,3>(vec2<f32>(-1.0,-1.0),vec2<f32>(3.0,-1.0),vec2<f32>(-1.0,3.0));var v:VertexOut;v.pos=vec4<f32>(a[i],0.0,1.0);v.uv=vec2<f32>((a[i].x+1.0)*0.5,(1.0-a[i].y)*0.5);return v;}
+@fragment fn fs(v:VertexOut)->@location(0) vec4<f32>{
+ let uv0=(v.uv-vec2<f32>(0.5))*p.oldTransform.xy+vec2<f32>(0.5)+p.oldTransform.zw;
+ let uv1=(v.uv-vec2<f32>(0.5))*p.newTransform.xy+vec2<f32>(0.5)+p.newTransform.zw;
+ // Sample unconditionally: derivative-based sampling requires uniform control flow.
+ let a=textureSample(texOld,smp,uv0);let b=textureSample(texNew,smp,uv1);
+ var c=vec3<f32>(0.014,0.021,0.033);
+ if(all(uv0>=vec2<f32>(0.0))&&all(uv0<=vec2<f32>(1.0))&&p.state.x>0.5){c=mix(c,a.rgb,a.a);}
+ if(all(uv1>=vec2<f32>(0.0))&&all(uv1<=vec2<f32>(1.0))&&p.state.y>0.5){c=mix(c,b.rgb,b.a);}
+ return vec4<f32>(c,1.0);
+}
+`;
+function transformFor(s){if(!s)return[1,1,0,0];const old=spanParts(s.z),r=2**Math.max(-100,Math.min(100,s.z-camera.z));let x=bigScaled(camera.r-s.r,old.e)/old.m,y=-bigScaled(camera.i-s.i,old.e)/(old.m*s.aspect);x=Math.max(-1e10,Math.min(1e10,x));y=Math.max(-1e10,Math.min(1e10,y));return[r,r*aspect()/s.aspect,x,y];}
+function queueDraw(){if(!ready||fatal||drawPending)return;drawPending=true;requestAnimationFrame(()=>{drawPending=false;try{drawDisplay();}catch(e){showError(e);}});}
+function drawDisplay(){
+ if(!ready||fatal)return;
+ const b=stage.getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1);const w=Math.min(device.limits.maxTextureDimension2D,Math.max(1,Math.round(b.width*dpr))),h=Math.min(device.limits.maxTextureDimension2D,Math.max(1,Math.round(b.height*dpr)));
+ if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+ const data=new Float32Array(12);data.set(transformFor(front?.view),0);data.set(transformFor(currentJob?.view),4);data[8]=front?1:0;data[9]=currentJob?1:0;
+ device.queue.writeBuffer(displayUniform,0,data);
+ const bind=device.createBindGroup({layout:displayLayout,entries:[{binding:0,resource:{buffer:displayUniform}},{binding:1,resource:(front?.texture||emptyTexture).createView()},{binding:2,resource:(currentJob?.texture||emptyTexture).createView()},{binding:3,resource:sampler}]});
+ const enc=device.createCommandEncoder();const pass=enc.beginRenderPass({colorAttachments:[{view:context.getCurrentTexture().createView(),clearValue:{r:.014,g:.02,b:.032,a:1},loadOp:'clear',storeOp:'store'}]});pass.setPipeline(displayPipeline);pass.setBindGroup(0,bind);pass.draw(3);pass.end();device.queue.submit([enc.finish()]);
+}
+function scheduleRender(interactive){
+ if(!ready||fatal)return;viewVersion++;jobSerial++;cancelWorker();for(const t of timers)clearTimeout(t);timers=[];
+ if(interactive){timers.push(setTimeout(()=>beginRender(true),85));timers.push(setTimeout(()=>{if(!autoTimer)beginRender(false);},480));}
+ else timers.push(setTimeout(()=>beginRender(false),10));
+}
+function releaseJob(j,keepTexture=false){if(!j)return;j.stateBuffer?.destroy();j.refBuffer?.destroy();j.uniform?.destroy();j.counterBuffer?.destroy();j.counterReadback?.destroy();if(!keepTexture)j.texture?.destroy();}
+function writeComputeParams(j,steps){const buf=new ArrayBuffer(80),u=new Uint32Array(buf),i=new Int32Array(buf),f=new Float32Array(buf);u[0]=j.w;u[1]=j.h;u[2]=j.maxIter;u[3]=steps;u[4]=j.reference.length;u[5]=j.reference.skip.n;i[6]=j.parts.e;u[7]=palette;f[8]=j.parts.m;f[9]=j.view.aspect;f[10]=phase;f[11]=density;f[12]=j.reference.skip.x;f[13]=j.reference.skip.y;f[14]=j.reference.skip.x-f[12];f[15]=j.reference.skip.y-f[13];i[16]=j.reference.skip.e;device.queue.writeBuffer(j.uniform,0,buf);}
+function dispatch(j,steps,countWork=false){writeComputeParams(j,steps);if(countWork)device.queue.writeBuffer(j.counterBuffer,0,new Uint32Array([0]));const enc=device.createCommandEncoder();const pass=enc.beginComputePass();pass.setPipeline(computePipeline);pass.setBindGroup(0,j.bind);pass.dispatchWorkgroups(Math.ceil(j.w/8),Math.ceil(j.h/8));pass.end();if(countWork)enc.copyBufferToBuffer(j.counterBuffer,0,j.counterReadback,0,4);device.queue.submit([enc.finish()]);}
+async function beginRender(preview){
+ if(!ready||fatal)return;const id=++jobSerial,s=snapshot(),start=performance.now();cancelWorker();
+ const maxIter=targetIterations(s.z);setStatus(preview?'\u30d7\u30ec\u30d3\u30e5\u30fc\u3092\u8a08\u7b97\u4e2d':'\u57fa\u6e96\u8ecc\u9053\u3092\u8a08\u7b97\u4e2d',referenceBits(s.z)+' bit / '+maxIter.toLocaleString()+' iterations');
+ try{
+  const ref=await getReference(s,maxIter,id);if(id!==jobSerial)return;
+  await device.queue.onSubmittedWorkDone();if(id!==jobSerial)return;
+  if(currentJob){releaseJob(currentJob);currentJob=null;}
+  const box=stage.getBoundingClientRect();let scale=preview?Math.min(.35,Number($('quality').value)):Number($('quality').value);
+  const maxPixels=Math.min(preview?180000:2000000,Math.floor(device.limits.maxStorageBufferBindingSize/40));
+  scale=Math.min(scale,Math.sqrt(maxPixels/Math.max(1,box.width*box.height)),device.limits.maxTextureDimension2D/Math.max(1,box.width),device.limits.maxTextureDimension2D/Math.max(1,box.height));
+  const w=Math.max(8,Math.round(box.width*scale)),h=Math.max(8,Math.round(box.height*scale));
+  const j={id,view:s,w,h,preview,maxIter,reference:ref,parts:spanParts(s.z),start,steps:64,progress:ref.skip.n,complete:false};
+  j.stateBuffer=device.createBuffer({size:w*h*40,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_SRC});
+  j.refBuffer=device.createBuffer({size:ref.length*24,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST});device.queue.writeBuffer(j.refBuffer,0,ref.buffer,0,ref.length*24);
+  j.uniform=device.createBuffer({size:80,usage:GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST});
+  j.texture=device.createTexture({size:[w,h],format:'rgba8unorm',usage:GPUTextureUsage.STORAGE_BINDING|GPUTextureUsage.TEXTURE_BINDING|GPUTextureUsage.COPY_SRC});
+  j.counterBuffer=device.createBuffer({size:4,usage:GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_SRC|GPUBufferUsage.COPY_DST});
+  j.counterReadback=device.createBuffer({size:4,usage:GPUBufferUsage.COPY_DST|GPUBufferUsage.MAP_READ});
+  j.bind=device.createBindGroup({layout:computePipeline.getBindGroupLayout(0),entries:[{binding:0,resource:{buffer:j.uniform}},{binding:1,resource:{buffer:j.refBuffer}},{binding:2,resource:{buffer:j.stateBuffer}},{binding:3,resource:j.texture.createView()},{binding:4,resource:{buffer:j.counterBuffer}}]});currentJob=j;
+  // Submit at most one compute batch at a time. Cancellation never queues an entire image.
+  while(j.progress<maxIter){
+   if(id!==jobSerial||fatal)return;
+   const t=performance.now(),steps=Math.min(j.steps,maxIter-j.progress);dispatch(j,steps,true);await j.counterReadback.mapAsync(GPUMapMode.READ);const activeGroups=new Uint32Array(j.counterReadback.getMappedRange())[0];j.counterReadback.unmap();if(id!==jobSerial||fatal)return;
+   j.progress=activeGroups===0?maxIter:Math.min(maxIter,j.progress+steps);j.batchMs=performance.now()-t;queueDraw();
+   $('progressBar').style.width=(100*j.progress/maxIter).toFixed(1)+'%';
+   setStatus((preview?'PREVIEW':'REFINING')+' / '+j.progress.toLocaleString()+' / '+maxIter.toLocaleString(),w+' x '+h+' / '+j.batchMs.toFixed(1)+' ms batch / skip '+ref.skip.n.toLocaleString());
+   // Small batches protect the desktop GPU watchdog, even at high iteration budgets.
+   if(j.batchMs>45)j.steps=Math.max(8,Math.floor(j.steps/2));else if(j.batchMs<12)j.steps=Math.min(256,j.steps*2);
+   await new Promise(requestAnimationFrame);
+  }
+  if(id!==jobSerial)return;
+  j.complete=true;gpuStats.renders++;gpuStats.lastCompleted={id,preview,w,h,iterations:maxIter,skip:ref.skip.n,bits:ref.bits,ms:performance.now()-start,zoom:s.z/LOG2_10};
+  // Keep state for instant palette edits. Retire the previous finished texture only now.
+  if(front){releaseJob(front);front=null;}
+  front=j;currentJob=null;
+  setStatus((preview?'PREVIEW READY':'RENDER COMPLETE')+' / '+((performance.now()-start)/1000).toFixed(2)+' s',w+' x '+h+' / '+ref.bits+' bit / skip '+ref.skip.n.toLocaleString());
+  $('progressBar').style.width='100%';queueDraw();
+ }catch(e){if(e.message!=='cancelled'&&id===jobSerial)showError(e);}
+}
+function recolor(){if(!ready||fatal)return;try{if(front)dispatch(front,0);if(currentJob)dispatch(currentJob,0);queueDraw();}catch(e){showError(e);}}
+function showError(e){if(fatal)return;fatal=true;ready=false;stopAuto();cancelWorker();jobSerial++;for(const t of timers)clearTimeout(t);gpuStats.lastError=String(e.stack||e);console.error(e);$('gpuDot').classList.remove('live');$('gpuLabel').textContent='GPU UNAVAILABLE';$('errorTitle').textContent='WebGPU \u3092\u958b\u59cb\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f';$('errorDescription').textContent='\u30d6\u30e9\u30a6\u30b6\u306e\u30cf\u30fc\u30c9\u30a6\u30a7\u30a2\u30a2\u30af\u30bb\u30e9\u30ec\u30fc\u30b7\u30e7\u30f3\u3092\u6709\u52b9\u306b\u3057\u3001WebGPU \u5bfe\u5fdc\u306e Chrome / Edge \u7b49\u3067\u958b\u3044\u3066\u304f\u3060\u3055\u3044\u3002\u30d7\u30ec\u30d3\u30e5\u30fc\u5185\u3067 GPU \u304c\u8a31\u53ef\u3055\u308c\u306a\u3044\u5834\u5408\u306f\u3001\u3053\u306e HTML \u3092\u30d6\u30e9\u30a6\u30b6\u3067\u76f4\u63a5\u958b\u304f\u304b\u3001localhost \u3067\u5b9f\u884c\u3057\u3066\u304f\u3060\u3055\u3044\u3002';$('errorDetail').textContent=String(e.message||e)+'\n\nLocal server:\npython -m http.server 8000 --bind 127.0.0.1\nhttp://localhost:8000/';$('errorPanel').classList.add('visible');}
+async function init(){try{
+ if(!navigator.gpu)throw Error('navigator.gpu is not available. A secure context and WebGPU-enabled browser are required.');
+ const adapter=await navigator.gpu.requestAdapter({powerPreference:'high-performance'});if(!adapter)throw Error('No compatible WebGPU adapter was found.');
+ device=await adapter.requestDevice();device.lost.then(info=>showError(Error('GPU device lost: '+info.message)));device.addEventListener('uncapturederror',ev=>showError(ev.error));
+ context=canvas.getContext('webgpu');if(!context)throw Error('Cannot create WebGPU canvas context.');format=navigator.gpu.getPreferredCanvasFormat();context.configure({device,format,alphaMode:'opaque'});
+ const cmod=device.createShaderModule({code:computeWGSL,label:'Extended exponent perturbation'});const dmod=device.createShaderModule({code:displayWGSL,label:'Camera reprojection'});
+ const diagnostics=await Promise.all([cmod.getCompilationInfo(),dmod.getCompilationInfo()]);for(const d of diagnostics){const errors=d.messages.filter(m=>m.type==='error');if(errors.length)throw Error(errors.map(e=>'WGSL line '+e.lineNum+': '+e.message).join('\n'));}
+ computePipeline=await device.createComputePipelineAsync({layout:'auto',compute:{module:cmod,entryPoint:'main'}});
+ displayPipeline=await device.createRenderPipelineAsync({layout:'auto',vertex:{module:dmod,entryPoint:'vs'},fragment:{module:dmod,entryPoint:'fs',targets:[{format}]},primitive:{topology:'triangle-list'}});displayLayout=displayPipeline.getBindGroupLayout(0);
+ sampler=device.createSampler({magFilter:'linear',minFilter:'linear'});displayUniform=device.createBuffer({size:48,usage:GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST});
+ emptyTexture=device.createTexture({size:[1,1],format:'rgba8unorm',usage:GPUTextureUsage.TEXTURE_BINDING|GPUTextureUsage.COPY_DST});device.queue.writeTexture({texture:emptyTexture},new Uint8Array([4,5,8,0]),{bytesPerRow:4},[1,1]);
+ $('gpuDot').classList.add('live');$('gpuLabel').textContent='WEBGPU ONLINE';$('gpuLabel').title=adapter.info?Object.values(adapter.info).join(' '):'WebGPU';
+ ready=true;gpuStats.ready=true;updateHud();fillEditor();queueDraw();scheduleRender(false);
+ }catch(e){showError(e);}}
+
+// Input: cursor-anchored wheel zoom, mouse/touch pan, two-finger pinch.
+const pointers=new Map();let gesture=null;
+function normPoint(x,y){const b=canvas.getBoundingClientRect();return{x:(x-b.left)/b.width,y:(y-b.top)/b.height};}
+function resetGesture(){const a=[...pointers.values()];if(a.length===1)gesture={kind:'pan',x:a[0].x,y:a[0].y,view:snapshot()};else if(a.length>=2){const x=(a[0].x+a[1].x)/2,y=(a[0].y+a[1].y)/2,n=normPoint(x,y),s=snapshot(),o=offsetAt(n.x,n.y,s);gesture={kind:'pinch',distance:Math.max(1,Math.hypot(a[1].x-a[0].x,a[1].y-a[0].y)),view:s,anchorR:s.r+o.r,anchorI:s.i+o.i};}else gesture=null;}
+canvas.addEventListener('wheel',e=>{e.preventDefault();stopAuto();const n=normPoint(e.clientX,e.clientY),unit=e.deltaMode===1?16:e.deltaMode===2?stage.clientHeight:1;zoomAt(n.x,n.y,Math.max(-2.8,Math.min(2.8,-e.deltaY*unit*(e.shiftKey?.016:.0035))),true);},{passive:false});
+canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;stopAuto();canvas.focus({preventScroll:true});canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.classList.add('dragging');resetGesture();});
+canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!gesture)return;if(gesture.kind==='pan'){panPixels(e.clientX-gesture.x,e.clientY-gesture.y,gesture.view);}else{const a=[...pointers.values()],d=Math.max(1,Math.hypot(a[1].x-a[0].x,a[1].y-a[0].y)),n=normPoint((a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2);camera.z=Math.max(-1.5,Math.min(MAX_ZOOM,gesture.view.z+Math.log2(d/gesture.distance)));const o=offsetAt(n.x,n.y);camera.r=gesture.anchorR-o.r;camera.i=gesture.anchorI-o.i;scene=-1;interact();}});
+function pointerUp(e){pointers.delete(e.pointerId);resetGesture();if(!pointers.size){canvas.classList.remove('dragging');if(performance.now()-lastInteraction<500)scheduleRender(false);}}
+canvas.addEventListener('pointerup',pointerUp);canvas.addEventListener('pointercancel',pointerUp);canvas.addEventListener('lostpointercapture',e=>{if(pointers.has(e.pointerId))pointerUp(e);});
+canvas.addEventListener('dblclick',e=>{stopAuto();const p=normPoint(e.clientX,e.clientY);zoomAt(p.x,p.y,e.shiftKey?-2:2,true);});canvas.addEventListener('contextmenu',e=>e.preventDefault());
+function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;$('autoBtn').classList.remove('running');$('autoBtn').querySelector('span').textContent=JP.auto;scheduleRender(false);}}
+function toggleAuto(){if(autoTimer){stopAuto();return;}if(!ready)return;$('autoBtn').classList.add('running');$('autoBtn').querySelector('span').textContent='\u81ea\u52d5\u30ba\u30fc\u30e0\u3092\u505c\u6b62';$('crosshair').classList.add('visible');$('crossBtn').classList.add('active');autoTimer=setInterval(()=>{if(document.hidden||worker||currentJob)return;zoomAt(.5,.5,.24);},260);}
+$('autoBtn').onclick=toggleAuto;$('zoomIn').onclick=()=>zoomAt(.5,.5,1,true);$('zoomOut').onclick=()=>zoomAt(.5,.5,-1,true);$('homeBtn').onclick=()=>selectPreset(0);
+$('crossBtn').onclick=()=>{$('crosshair').classList.toggle('visible');$('crossBtn').classList.toggle('active');};
+$('fullBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await stage.requestFullscreen();}catch(e){toast(e.message);}};
+function togglePanel(){if(innerWidth<680)$('sidebar').classList.toggle('open');else document.body.classList.toggle('collapsed');setTimeout(()=>{queueDraw();scheduleRender(false);},30);}
+$('panelToggle').onclick=togglePanel;$('helpBtn').onclick=()=>$('helpDialog').showModal();$('closeHelp').onclick=()=>$('helpDialog').close();$('retryBtn').onclick=()=>location.reload();
+for(const id of ['iterations','quality','skip'])$(id).onchange=()=>scheduleRender(false);
+$('palettes').onclick=e=>{const b=e.target.closest('[data-palette]');if(!b)return;palette=Number(b.dataset.palette);for(const a of document.querySelectorAll('.swatch'))a.classList.toggle('active',a===b);recolor();};
+$('phase').oninput=()=>{phase=Number($('phase').value);$('phaseValue').textContent=phase.toFixed(2);recolor();};$('density').onchange=()=>{density=Number($('density').value);recolor();};
+$('locationDetails').addEventListener('toggle',()=>{if($('locationDetails').open)fillEditor();});
+$('applyLocation').onclick=()=>{try{const r=parseDecimal($('realInput').value),i=parseDecimal($('imagInput').value),z=Number($('zoomInput').value)*LOG2_10;if(!Number.isFinite(z)||z< -1.5||z>MAX_ZOOM)throw Error('Zoom must be between 10^-0.45 and 10^1000.');stopAuto();camera.r=r;camera.i=i;camera.z=z;scene=-1;updateHud();queueDraw();scheduleRender(false);}catch(e){toast(e.message);}};
+function locationData(){return{format:'infinite-field-1',fractionalBits:CAM_BITS,realFixed:camera.r.toString(),imagFixed:camera.i.toString(),zoomLog2:camera.z,iterations:$('iterations').value,palette,phase,density,skip:$('skip').checked};}
+function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),30000);}
+$('copyLocation').onclick=async()=>{const data=JSON.stringify(locationData(),null,2);try{await navigator.clipboard.writeText(data);toast('\u6b63\u78ba\u306a\u4f4d\u7f6e\u30c7\u30fc\u30bf\u3092\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f\u3002');}catch{download(new Blob([data],{type:'application/json'}),'mandelbrot-location.json');toast('\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306e\u4ee3\u308f\u308a\u306b JSON \u3092\u4fdd\u5b58\u3057\u307e\u3057\u305f\u3002');}};
+$('saveLocation').onclick=()=>download(new Blob([JSON.stringify(locationData(),null,2)],{type:'application/json'}),'mandelbrot-location.json');$('loadLocation').onclick=()=>$('loadFile').click();
+function importLocation(d){
+ if(d.format!=='infinite-field-1'||d.fractionalBits!==CAM_BITS)throw Error('Not a compatible location file.');
+ if(typeof d.realFixed!=='string'||typeof d.imagFixed!=='string'||d.realFixed.length>1500||d.imagFixed.length>1500||!/^[-]?\d+$/.test(d.realFixed)||!/^[-]?\d+$/.test(d.imagFixed))throw Error('Invalid fixed-point coordinates.');
+ const r=BigInt(d.realFixed),i=BigInt(d.imagFixed),z=d.zoomLog2;if(typeof z!=='number'||!Number.isFinite(z)||z< -1.5||z>MAX_ZOOM||r>1000000n*UNIT||r< -1000000n*UNIT||i>1000000n*UNIT||i< -1000000n*UNIT)throw Error('Location is outside supported limits.');
+ stopAuto();camera.r=r;camera.i=i;camera.z=z;scene=-1;
+ if([...$('iterations').options].some(o=>o.value===String(d.iterations)))$('iterations').value=d.iterations;
+ palette=Number.isInteger(d.palette)&&d.palette>=0&&d.palette<4?d.palette:0;phase=Number.isFinite(d.phase)?Math.max(0,Math.min(1,d.phase)):0;density=[.006,.012,.02,.04,.08].includes(d.density)?d.density:.02;
+ $('phase').value=phase;$('phaseValue').textContent=phase.toFixed(2);$('density').value=String(density);if(typeof d.skip==='boolean')$('skip').checked=d.skip;for(const b of document.querySelectorAll('.swatch'))b.classList.toggle('active',Number(b.dataset.palette)===palette);
+ updateHud();fillEditor();queueDraw();scheduleRender(false);
+}
+$('loadFile').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>30000)throw Error('Location file is too large.');importLocation(JSON.parse(await f.text()));toast('\u4fdd\u5b58\u4f4d\u7f6e\u306b\u79fb\u52d5\u3057\u307e\u3057\u305f\u3002');}catch(e){toast(e.message);}finally{$('loadFile').value='';}};
+// Read back the displayed canvas immediately after submitting a fresh frame.
+$('shotBtn').onclick=()=>{if(!ready)return;requestAnimationFrame(()=>{try{drawDisplay();const out=document.createElement('canvas');out.width=canvas.width;out.height=canvas.height;out.getContext('2d').drawImage(canvas,0,0);out.toBlob(b=>{if(b)download(b,'mandelbrot-'+(camera.z/LOG2_10).toFixed(2)+'-decades.png');else toast('PNG export failed.');},'image/png');}catch(e){toast(e.message);}});};
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)||$('helpDialog').open)return;if(e.code==='Space'){e.preventDefault();toggleAuto();}else if(e.key==='+'||e.key==='='){e.preventDefault();zoomAt(.5,.5,1,true);}else if(e.key==='-'){e.preventDefault();zoomAt(.5,.5,-1,true);}else if(e.key.toLowerCase()==='r')selectPreset(0);else if(e.key.toLowerCase()==='h')togglePanel();else if(e.key==='Escape')stopAuto();else if(e.key.startsWith('Arrow')){e.preventDefault();const d=stage.clientWidth*.12;panPixels(e.key==='ArrowLeft'?d:e.key==='ArrowRight'?-d:0,e.key==='ArrowUp'?d:e.key==='ArrowDown'?-d:0);}});
+let resizeTimer;new ResizeObserver(()=>{queueDraw();clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(ready)scheduleRender(false);},180);}).observe(stage);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAuto();});
+// Read-only-ish diagnostic surface for local automated regression tests.
+window.mandelbrot={stats:gpuStats,getView:()=>locationData(),selectPreset,importLocation,parseDecimal,formatDecimal,scaledBig,spanParts,render:()=>scheduleRender(false),setZoom:(decades)=>{camera.z=Math.max(-1.5,Math.min(MAX_ZOOM,decades*LOG2_10));updateHud();scheduleRender(false);},getJob:()=>currentJob||front,readPixels:async()=>{const j=currentJob||front;if(!j)throw Error('No rendered image.');const size=j.w*j.h*40,b=device.createBuffer({size,usage:GPUBufferUsage.COPY_DST|GPUBufferUsage.MAP_READ}),e=device.createCommandEncoder();e.copyBufferToBuffer(j.stateBuffer,0,b,0,size);device.queue.submit([e.finish()]);await b.mapAsync(GPUMapMode.READ);const data=b.getMappedRange().slice(0);b.unmap();b.destroy();return{data,w:j.w,h:j.h,view:j.view};}};
+updateHud();init();
+</script>
+</body>
+</html>
