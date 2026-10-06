@@ -1,31 +1,33 @@
 # Infinite Field / WebGPU Mandelbrot Explorer
 
-マンデルブロ集合を浮動小数点演算の限界を超えて高速に拡大表示できる Web ページです。
+A web-based Mandelbrot set explorer that can zoom rapidly far beyond the limits of ordinary floating-point arithmetic.
 
-## 起動
+## Getting Started
 
-WebGPU 対応ブラウザで `index.html` を開いてください。直接開いて動かない場合は、このフォルダで次を実行します。
+Open `index.html` in a WebGPU-compatible browser. If opening it directly does not work, run the following command in this directory:
 
 ```sh
 python -m http.server 8000 --bind 127.0.0.1
 ```
 
-ブラウザで `http://localhost:8000/` を開きます。Windows で `python` がない場合は `py` を使ってください。ハードウェアアクセラレーションを有効にしてください。埋め込みプレビューでは WebGPU や Blob Worker が制限される場合があります。その場合は通常のブラウザタブで開いてください。
+Then open `http://localhost:8000/` in your browser. On Windows, use `py` instead of `python` if `python` is not available. Make sure hardware acceleration is enabled.
 
-[デモ](https://mtcedarnet.github.io/mandelbrot-deepzoom/)
+WebGPU or Blob Workers may be restricted in embedded previews. If so, open the page in a normal browser tab.
 
-## 操作
+[Demo](https://mtcedarnet.github.io/mandelbrot-deepzoom/)
 
-- ホイール: ポインタ位置を中心に拡大・縮小。Shift 併用で高速。
-- ドラッグ: 移動。ダブルクリック: 4 倍。タッチはピンチ対応。
-- `+` / `-`: 2 倍 / 1/2 倍。`R`: 全景。`H`: パネル切替。
-- `Space`: 自動ズーム。`Esc`: 停止。
-- 座標パネル: 小数文字列で座標入力、正確な固定小数点座標を JSON で保存・復元。
-- PNG: 表示画像を保存。
+## Controls
 
-## 計算方式
+- Mouse wheel: Zoom in or out around the pointer position. Hold Shift for faster zooming.
+- Drag: Pan the view. Double-click: Zoom in 4x. Touch input supports pinch zoom.
+- `+` / `-`: Zoom 2x / 1/2x. `R`: Reset to the full view. `H`: Toggle the panel.
+- `Space`: Start auto-zoom. `Esc`: Stop.
+- Coordinates panel: Enter coordinates as decimal strings, and save or restore exact fixed-point coordinates as JSON.
+- PNG: Save the current view as an image.
 
-カメラ座標は小数部 4096 bit の BigInt 固定小数点。基準軌道の計算は Web Worker で行い、精度はズームに応じて増やします。GPU は FP32 二本組の仮数と i32 指数を使用し、摂動式を計算します。必要に応じて軌道を再基準化します。
+## Computation Method
+
+Camera coordinates are represented using BigInt fixed-point values with 4096 fractional bits. The reference orbit is computed in a Web Worker, with precision increased according to the zoom level. On the GPU, perturbation calculations use a pair of FP32 values for the mantissa together with an i32 exponent. The reference orbit is rebased when necessary.
 
 ```text
 z = Z + delta_z
@@ -33,21 +35,27 @@ c = C + delta_c
 delta_z_next = 2*Z*delta_z + delta_z^2 + delta_c
 ```
 
-画面全体の非線形誤差上界を見積もり、初期反復を線形近似で省略する機能を付けています。これは多項式の高次級数近似や全反復区間の BLA テーブルではなく、初期区間の一次近似です。画素すべての計算が完了すると、反復上限に達する前でも処理を終了します。
+The renderer estimates an upper bound on nonlinear error over the entire screen and can skip the initial iterations using a linear approximation. This is not a higher-order polynomial series approximation or a BLA table covering the full iteration range; it is a first-order approximation over the initial interval.
 
-操作中は既存画像の再投影と低解像度描画、停止後は高精細描画に切り替えます。一度にキューに投げる計算は短いバッチに分割しています。
+Once all pixels have completed computation, rendering stops even if the configured iteration limit has not yet been reached.
 
-## 制限と検証状況
+While interacting, the viewer uses reprojection of the existing image together with low-resolution rendering. After interaction stops, it switches to high-resolution rendering. GPU workloads are divided into short batches rather than being queued all at once.
 
-操作上限は 10^1000 倍ですが、全地点での正確性・描画速度を保証しません。黒い画素は「反復上限まで発散を検出しなかった」点であり、集合内部の証明ではありません。正確な区間演算や誤差保証付き描画ではありません。
+## Limitations and Validation Status
 
-数値テストの再実行には Node.js を使います。ビューア自体に Node.js は不要です。
+The interface allows zoom levels up to 10^1000, but correctness and rendering speed are not guaranteed at every location.
+
+Black pixels indicate points for which divergence was not detected before reaching the iteration limit. They do not constitute a proof that the point is inside the Mandelbrot set.
+
+This renderer does not use rigorous interval arithmetic and does not provide formally guaranteed error bounds.
+
+Node.js is used only to rerun the numerical tests. The viewer itself does not require Node.js.
 
 ```sh
 node test_numeric.cjs
 ```
 
-## 参考資料
+## References
 
 - Claude Heiland-Allen, Deep zoom theory and practice (2021): https://mathr.co.uk/blog/2021-05-14_deep_zoom_theory_and_practice.html
 - Claude Heiland-Allen, Deep zoom theory and practice (again) (2022): https://mathr.co.uk/blog/2022-02-21_deep_zoom_theory_and_practice_again.html
