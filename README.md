@@ -12,6 +12,8 @@ python -m http.server 8000 --bind 127.0.0.1
 
 ブラウザで `http://localhost:8000/` を開きます。Windows で `python` がない場合は `py` を使ってください。ハードウェアアクセラレーションを有効にしてください。埋め込みプレビューでは WebGPU や Blob Worker が制限される場合があります。その場合は通常のブラウザタブで開いてください。
 
+[デモ](https://mtcedarnet.github.io/mandelbrot-deepzoom/)
+
 ## 操作
 
 - ホイール: ポインタ位置を中心に拡大・縮小。Shift 併用で高速。
